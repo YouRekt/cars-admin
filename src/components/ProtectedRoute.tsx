@@ -6,7 +6,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 	const userContext = useContext(UserContext);
 	const user = userContext ? userContext.user : null;
 
-	if (!user) {
+	if (!user && !import.meta.env.VITE_DEV) {
 		return <Navigate to="/unauthorized" replace />;
 	}
 
