@@ -48,7 +48,7 @@ export function AppSidebar() {
 	const { user, logout } = context;
 
 	const handleLogout = () => {
-		navigate("/");
+		navigate("/", { replace: true });
 		logout();
 	};
 
@@ -89,10 +89,10 @@ export function AppSidebar() {
 									className="hover:bg-app-secondary hover:text-white font-medium text-lg [&>svg]:size-6"
 									onClick={handleLogout}
 								>
-									<a href="#">
+									<div>
 										<LogOut />
 										<span>Log out</span>
-									</a>
+									</div>
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 						</SidebarMenu>
