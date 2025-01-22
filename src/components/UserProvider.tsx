@@ -1,5 +1,6 @@
 import { getCustomerToken } from "@/lib/utils";
 import { UserContext } from "@/UserContext";
+import Cookies from "js-cookie";
 import { useState, ReactNode } from "react";
 
 const UserProvider = ({ children }: { children: ReactNode }) => {
@@ -9,6 +10,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
 	const logout = () => {
 		setUser(null);
 		// TODO: Clear the customer token cookie
+		Cookies.remove("customer-token");
 	}; // Function to clear user state
 
 	return (
