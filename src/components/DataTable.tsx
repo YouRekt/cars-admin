@@ -10,6 +10,7 @@ import {
 	SortingState,
 	ColumnFiltersState,
 	getFilteredRowModel,
+	VisibilityState,
 } from "@tanstack/react-table";
 
 import {
@@ -20,6 +21,12 @@ import {
 	TableHeader,
 	TableRow,
 } from "@/components/ui/table";
+import {
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import {
 	Pagination,
@@ -29,6 +36,7 @@ import {
 } from "@/components/ui/pagination";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[];
@@ -40,8 +48,14 @@ export function DataTable<TData, TValue>({
 	data,
 }: DataTableProps<TData, TValue>) {
 	const [sorting, setSorting] = useState<SortingState>([]);
+	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+		{}
+	);
 
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+	const [rowSelection, setRowSelection] = useState({});
+
+	const { toast } = useToast();
 
 	const table = useReactTable({
 		data,
@@ -52,9 +66,13 @@ export function DataTable<TData, TValue>({
 		getSortedRowModel: getSortedRowModel(),
 		onColumnFiltersChange: setColumnFilters,
 		getFilteredRowModel: getFilteredRowModel(),
+		onColumnVisibilityChange: setColumnVisibility,
+		onRowSelectionChange: setRowSelection,
 		state: {
 			sorting,
 			columnFilters,
+			columnVisibility,
+			rowSelection,
 		},
 	});
 
@@ -119,7 +137,135 @@ export function DataTable<TData, TValue>({
 					}
 					className="max-w-sm"
 				/>
+				<div className="ml-2 flex space-x-2">
+					<Button
+						variant={
+							table.getSelectedRowModel().rows.length === 0
+								? "outline"
+								: "destructive"
+						}
+						className="ml-2"
+						onClick={() => {
+							const selectedRows = table
+								.getSelectedRowModel()
+								.rows.map((row) => row.original);
+
+							toast({
+								title: "Users removed",
+								description: `${selectedRows.length} users removed.`,
+							});
+						}}
+						disabled={table.getSelectedRowModel().rows.length === 0}
+					>
+						Remove Selected Users
+					</Button>
+					<Button
+						variant="outline"
+						onClick={() => {
+							const selectedRows =
+								table.getSelectedRowModel().rows;
+							if (selectedRows.length > 0) {
+								const ids = selectedRows.map(
+									(row) => row.original.id
+								);
+								navigator.clipboard.writeText(ids.join(", "));
+								toast({
+									title: "IDs Copied",
+									description: `${ids.length} IDs copied to clipboard.`,
+								});
+							} else {
+								alert("No rows selected");
+							}
+						}}
+						disabled={table.getSelectedRowModel().rows.length === 0}
+					>
+						Copy Selected IDs
+					</Button>
+					<Button
+						variant="outline"
+						onClick={() => {
+							const selectedRows =
+								table.getSelectedRowModel().rows;
+							if (selectedRows.length > 0) {
+								const usernames = selectedRows.map(
+									(row) => row.original.username
+								);
+								navigator.clipboard.writeText(
+									usernames.join(", ")
+								);
+								toast({
+									title: "Usernames Copied",
+									description: `${usernames.length} usernames copied to clipboard.`,
+								});
+							} else {
+								alert("No rows selected");
+							}
+						}}
+						disabled={table.getSelectedRowModel().rows.length === 0}
+					>
+						Copy Selected Usernames
+					</Button>
+					<Button
+						variant="outline"
+						onClick={() => {
+							const selectedRows =
+								table.getSelectedRowModel().rows;
+							if (selectedRows.length > 0) {
+								const emails = selectedRows.map(
+									(row) => row.original.email
+								);
+								navigator.clipboard.writeText(
+									emails.join(", ")
+								);
+								toast({
+									title: "Emails Copied",
+									description: `${emails.length} emails copied to clipboard.`,
+								});
+							} else {
+								alert("No rows selected");
+							}
+						}}
+						disabled={table.getSelectedRowModel().rows.length === 0}
+					>
+						Copy Selected Emails
+					</Button>
+				</div>
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button variant="outline" className="ml-auto">
+							Columns
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align="end">
+						{table
+							.getAllColumns()
+							.filter((column) => column.getCanHide())
+							.map((column) => {
+								return (
+									<DropdownMenuCheckboxItem
+										key={column.id}
+										className="capitalize"
+										checked={column.getIsVisible()}
+										onCheckedChange={(value) =>
+											column.toggleVisibility(!!value)
+										}
+									>
+										{column.id}
+									</DropdownMenuCheckboxItem>
+								);
+							})}
+					</DropdownMenuContent>
+				</DropdownMenu>
 			</div>
+			{/* {table.getFilteredSelectedRowModel().rows.length > 0 && (
+				<div className="flex-1 text-sm text-muted-foreground">
+					{`${table.getFilteredSelectedRowModel().rows.length} of	${
+						table.getFilteredRowModel().rows.length
+					} row${
+						table.getFilteredRowModel().rows.length > 1 && "s"
+					} selected.`}
+				</div>
+			)} */}
 			<div className="rounded-md border">
 				<Table>
 					<TableHeader>
