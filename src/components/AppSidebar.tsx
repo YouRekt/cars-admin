@@ -56,7 +56,9 @@ export function AppSidebar() {
 		<Sidebar>
 			<SidebarHeader>
 				<img src="/logo.svg" alt="Logo" />
-				<h1 className="text-2xl text-app-primary font-medium">{`Hello, ${user}!`}</h1>
+				{user && (
+					<h1 className="text-2xl text-app-primary font-medium">{`Hello, ${user}!`}</h1>
+				)}
 			</SidebarHeader>
 			<SidebarContent>
 				<SidebarGroup>
