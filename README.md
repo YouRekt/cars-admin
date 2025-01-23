@@ -1,7 +1,9 @@
 # TODO
 
-- [X] Login form <- shadcn component
-- [ ] /users <- main functionality
-- [ ] /cars <- main functionality
-- [ ] /rentals <- main functionality
-- [ ] /administrators <- main functionality
+-   [x] Login form <- shadcn component
+-   [ ] /users
+    -   [x] User table
+    -   [ ] Multisorting
+-   [ ] /cars <- main functionality
+-   [ ] /rentals <- main functionality
+-   [ ] /administrators <- main functionality
