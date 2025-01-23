@@ -28,37 +28,12 @@ createRoot(document.getElementById("root")!).render(
 							</ProtectedRoute>
 						}
 					>
-						<Route
-							path="users"
-							element={
-								<ProtectedRoute>
-									<Users />
-								</ProtectedRoute>
-							}
-						/>
-						<Route
-							path="cars"
-							element={
-								<ProtectedRoute>
-									<Cars />
-								</ProtectedRoute>
-							}
-						/>
-						<Route
-							path="rentals"
-							element={
-								<ProtectedRoute>
-									<Rentals />
-								</ProtectedRoute>
-							}
-						/>
+						<Route path="users" element={<Users />} />
+						<Route path="cars" element={<Cars />} />
+						<Route path="rentals" element={<Rentals />} />
 						<Route
 							path="administrators"
-							element={
-								<ProtectedRoute>
-									<Administrators />
-								</ProtectedRoute>
-							}
+							element={<Administrators />}
 						/>
 					</Route>
 				</Routes>
