@@ -1,6 +1,182 @@
+import { DataTable } from "@/components/DataTable";
 import SidebarButtonProvider from "@/components/SidebarButtonProvider";
+import { columns, User } from "@/components/users/columns";
+
+const exampleData: User[] = [
+	{ id: "1", username: "John Doe", email: "johndoe@example.com" },
+	{ id: "2", username: "Jane Doe", email: "janedoe@example.com" },
+	{ id: "3", username: "Alice Smith", email: "alicesmith@example.com" },
+	{ id: "4", username: "Bob Johnson", email: "bobjohnson@example.com" },
+	{ id: "5", username: "Charlie Brown", email: "charliebrown@example.com" },
+	{ id: "6", username: "Diana Prince", email: "dianaprince@example.com" },
+	{ id: "7", username: "Bruce Wayne", email: "brucewayne@example.com" },
+	{ id: "8", username: "Clark Kent", email: "clarkkent@example.com" },
+	{ id: "9", username: "Barry Allen", email: "barryallen@example.com" },
+	{ id: "10", username: "Hal Jordan", email: "haljordan@example.com" },
+	{ id: "11", username: "Arthur Curry", email: "arthurcurry@example.com" },
+	{ id: "12", username: "Victor Stone", email: "victorstone@example.com" },
+	{ id: "13", username: "Oliver Queen", email: "oliverqueen@example.com" },
+	{ id: "14", username: "Dinah Lance", email: "dinahlance@example.com" },
+	{ id: "15", username: "Wally West", email: "wallywest@example.com" },
+	{ id: "16", username: "Kara Zor-El", email: "karazor-el@example.com" },
+	{ id: "17", username: "John Stewart", email: "johnstewart@example.com" },
+	{ id: "18", username: "Shayera Hol", email: "shayerahol@example.com" },
+	{ id: "19", username: "J'onn J'onzz", email: "jonnjonzz@example.com" },
+	{
+		id: "20",
+		username: "Zatanna Zatara",
+		email: "zatannazatara@example.com",
+	},
+	{ id: "21", username: "Billy Batson", email: "billybatson@example.com" },
+	{ id: "22", username: "Selina Kyle", email: "selinakyle@example.com" },
+	{ id: "23", username: "Harley Quinn", email: "harleyquinn@example.com" },
+	{ id: "24", username: "Pamela Isley", email: "pamela.isley@example.com" },
+	{ id: "25", username: "Edward Nigma", email: "edwardnigma@example.com" },
+	{
+		id: "26",
+		username: "Oswald Cobblepot",
+		email: "oswaldcobblepot@example.com",
+	},
+	{
+		id: "27",
+		username: "Jonathan Crane",
+		email: "jonathancrane@example.com",
+	},
+	{ id: "28", username: "Bane", email: "bane@example.com" },
+	{ id: "29", username: "Ra's al Ghul", email: "rasalghul@example.com" },
+	{ id: "30", username: "Talia al Ghul", email: "taliaalghul@example.com" },
+	{ id: "31", username: "Damian Wayne", email: "damianwayne@example.com" },
+	{ id: "32", username: "Tim Drake", email: "timdrake@example.com" },
+	{ id: "33", username: "Jason Todd", email: "jasontodd@example.com" },
+	{
+		id: "34",
+		username: "Barbara Gordon",
+		email: "barbaragordon@example.com",
+	},
+	{
+		id: "35",
+		username: "Stephanie Brown",
+		email: "stephaniebrown@example.com",
+	},
+	{
+		id: "36",
+		username: "Cassandra Cain",
+		email: "cassandracain@example.com",
+	},
+	{ id: "37", username: "Kate Kane", email: "katekane@example.com" },
+	{
+		id: "38",
+		username: "Helena Bertinelli",
+		email: "helenabertinelli@example.com",
+	},
+	{ id: "39", username: "Renee Montoya", email: "reneemontoya@example.com" },
+	{ id: "40", username: "Lucius Fox", email: "luciusfox@example.com" },
+	{
+		id: "41",
+		username: "Alfred Pennyworth",
+		email: "alfredpennyworth@example.com",
+	},
+	{
+		id: "42",
+		username: "Leslie Thompkins",
+		email: "lesliethompkins@example.com",
+	},
+	{ id: "43", username: "Hugo Strange", email: "hugostrange@example.com" },
+	{ id: "44", username: "Victor Fries", email: "victorfries@example.com" },
+	{ id: "45", username: "Waylon Jones", email: "waylonjones@example.com" },
+	{ id: "46", username: "Floyd Lawton", email: "floydlawton@example.com" },
+	{
+		id: "47",
+		username: "George Harkness",
+		email: "georgeharkness@example.com",
+	},
+	{ id: "48", username: "Slade Wilson", email: "sladewilson@example.com" },
+	{
+		id: "49",
+		username: "Garfield Lynns",
+		email: "garfieldlynns@example.com",
+	},
+	{ id: "50", username: "Roman Sionis", email: "romansionis@example.com" },
+	{ id: "51", username: "Jervis Tetch", email: "jervistetch@example.com" },
+	{ id: "52", username: "Arnold Wesker", email: "arnoldwesker@example.com" },
+	{ id: "53", username: "Basil Karlo", email: "basilkarlo@example.com" },
+	{ id: "54", username: "Harvey Dent", email: "harveydent@example.com" },
+	{ id: "55", username: "Thomas Elliot", email: "thomaselliot@example.com" },
+	{ id: "56", username: "David Cain", email: "davidcain@example.com" },
+	{ id: "57", username: "Lady Shiva", email: "ladyshiva@example.com" },
+	{ id: "58", username: "David Zavimbe", email: "davidzavimbe@example.com" },
+	{ id: "59", username: "Luke Fox", email: "lukefox@example.com" },
+	{
+		id: "60",
+		username: "Jean-Paul Valley",
+		email: "jeanpaulvalley@example.com",
+	},
+	{ id: "61", username: "Michael Lane", email: "michaellane@example.com" },
+	{ id: "62", username: "Azrael", email: "azrael@example.com" },
+	{
+		id: "63",
+		username: "Richard Grayson",
+		email: "richardgrayson@example.com",
+	},
+	{ id: "64", username: "Roy Harper", email: "royharper@example.com" },
+	{ id: "65", username: "Koriand'r", email: "koriandr@example.com" },
+	{ id: "66", username: "Rachel Roth", email: "rachelroth@example.com" },
+	{
+		id: "67",
+		username: "Garfield Logan",
+		email: "garfieldlogan@example.com",
+	},
+	{ id: "68", username: "Donna Troy", email: "donnatroy@example.com" },
+	{ id: "69", username: "Garth", email: "garth@example.com" },
+	{ id: "70", username: "Lilith Clay", email: "lilithclay@example.com" },
+	{ id: "71", username: "Mal Duncan", email: "malduncan@example.com" },
+	{ id: "72", username: "Karen Beecher", email: "karenbeecher@example.com" },
+	{ id: "73", username: "Hank Hall", email: "hankhall@example.com" },
+	{ id: "74", username: "Dawn Granger", email: "dawngranger@example.com" },
+	{ id: "75", username: "Kole Weathers", email: "koleweathers@example.com" },
+	{ id: "76", username: "Jericho", email: "jericho@example.com" },
+	{ id: "77", username: "Rose Wilson", email: "rosewilson@example.com" },
+	{ id: "78", username: "Grant Wilson", email: "grantwilson@example.com" },
+	{ id: "79", username: "Joseph Wilson", email: "josephwilson@example.com" },
+	{ id: "80", username: "Tara Markov", email: "taramarkov@example.com" },
+	{ id: "81", username: "Victor Stone", email: "victorstone@example.com" },
+	{
+		id: "82",
+		username: "Garfield Logan",
+		email: "garfieldlogan@example.com",
+	},
+	{ id: "83", username: "Kory Anders", email: "koryanders@example.com" },
+	{ id: "84", username: "Rachel Roth", email: "rachelroth@example.com" },
+	{ id: "85", username: "Donna Troy", email: "donnatroy@example.com" },
+	{ id: "86", username: "Garth", email: "garth@example.com" },
+	{ id: "87", username: "Lilith Clay", email: "lilithclay@example.com" },
+	{ id: "88", username: "Mal Duncan", email: "malduncan@example.com" },
+	{ id: "89", username: "Karen Beecher", email: "karenbeecher@example.com" },
+	{ id: "90", username: "Hank Hall", email: "hankhall@example.com" },
+	{ id: "91", username: "Dawn Granger", email: "dawngranger@example.com" },
+	{ id: "92", username: "Kole Weathers", email: "koleweathers@example.com" },
+	{ id: "93", username: "Jericho", email: "jericho@example.com" },
+	{ id: "94", username: "Rose Wilson", email: "rosewilson@example.com" },
+	{ id: "95", username: "Grant Wilson", email: "grantwilson@example.com" },
+	{ id: "96", username: "Joseph Wilson", email: "josephwilson@example.com" },
+	{ id: "97", username: "Tara Markov", email: "taramarkov@example.com" },
+	{ id: "98", username: "Victor Stone", email: "victorstone@example.com" },
+	{
+		id: "99",
+		username: "Garfield Logan",
+		email: "garfieldlogan@example.com",
+	},
+	{ id: "100", username: "Kory Anders", email: "koryanders@example.com" },
+];
 
 const Users = () => {
-	return <SidebarButtonProvider>Users</SidebarButtonProvider>;
+	return (
+		<SidebarButtonProvider>
+			<div className="container mx-auto py-10 px-4">
+				<DataTable columns={columns} data={exampleData} />
+			</div>
+		</SidebarButtonProvider>
+	);
 };
+
 export default Users;
