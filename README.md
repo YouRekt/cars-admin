@@ -1,9 +1,28 @@
-# TODO
+### TODOs
 
--   [x] Login form <- shadcn component
--   [ ] /users
-    -   [x] User table
-    -   [ ] Multisorting
--   [ ] /cars <- main functionality
--   [ ] /rentals <- main functionality
--   [ ] /administrators <- main functionality
+#### ✅ **Completed**
+
+-   **Login Form**: Implemented using the Shadcn component.
+
+#### 🟡 **In Progress**
+
+##### `/users`
+
+-   [ ] Refactor the **User Table** according to requirements.
+-   [ ] Add **Multisorting** functionality.
+
+##### `/cars`
+
+-   [ ] Develop **Main Functionality**.
+
+##### `/rentals`
+
+-   [ ] Develop **Main Functionality**.
+
+##### `/administrators`
+
+-   [ ] Develop **Main Functionality**.
+
+#### ⚙️ **Miscellaneous**
+
+-   [ ] Investigate **weird performance issues** (possibly caused by `ProtectedRoute`).
