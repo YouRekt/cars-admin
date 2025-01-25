@@ -13,10 +13,17 @@ export default defineConfig({
 	server: {
 		cors: true,
 		proxy: {
-			"/session": {
-				target: "http://localhost:8080",
+			"/login": {
+				target: "http://localhost:8080/administrator",
 				changeOrigin: true,
-				secure: false,
+			},
+			"/register": {
+				target: "http://localhost:8080/administrator",
+				changeOrigin: true,
+			},
+			"/username/*": {
+				target: "http://localhost:8080/administrator",
+				changeOrigin: true,
 			},
 		},
 	},
