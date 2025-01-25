@@ -51,23 +51,33 @@ const LoginForm = () => {
 	});
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
-		const credentials = btoa(`${values.username}:${values.password}`);
-
 		try {
-			const response = await fetch("/session", {
+			const response = await fetch("/login", {
 				method: "PUT",
 				headers: {
-					Authorization: `Basic ${credentials}`,
+					"Content-Type": "application/json",
 				},
-				credentials: "include", // Include cookies
+				body: JSON.stringify(values),
 			});
 
 			if (response.ok) {
-				//const token = getCustomerToken();
-				const token = Cookies.get("customer-token");
+				const token = Cookies.get("administrator-token");
 				if (token) {
-					login(token); // Update the context with the user data
-					navigate("/cars"); // Redirect to the dashboard
+					login(token);
+
+					try {
+						const response = await fetch(
+							`http://localhost:8080/administrator/username/${token}`
+						);
+						if (response.ok) {
+							const username = await response.text();
+							localStorage.setItem("username", username);
+						}
+					} catch {
+						throw new Error("Username not found.");
+					}
+
+					navigate("/cars");
 				}
 			} else if (response.status === 401) {
 				form.setError("root", {
