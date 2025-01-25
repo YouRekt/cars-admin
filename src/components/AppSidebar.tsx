@@ -45,7 +45,9 @@ export function AppSidebar() {
 	if (!context) {
 		throw new Error("UserContext is null");
 	}
-	const { user, logout } = context;
+	const { logout } = context;
+
+	const user = localStorage.getItem("username");
 
 	const handleLogout = () => {
 		navigate("/", { replace: true });
@@ -57,7 +59,7 @@ export function AppSidebar() {
 			<SidebarHeader>
 				<img src="/logo.svg" alt="Logo" />
 				{user && (
-					<h1 className="text-2xl text-app-primary font-medium">{`Hello, ${user}!`}</h1>
+					<h1 className="text-2xl text-app-primary font-medium text-center">{`Hello, ${user}!`}</h1>
 				)}
 			</SidebarHeader>
 			<SidebarContent>
