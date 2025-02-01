@@ -10,6 +10,7 @@
 
 -   [ ] Refactor the **User Table** according to requirements.
 -   [ ] Add **Multisorting** functionality.
+-   [ ] Add [Manual Pagination](https://tanstack.com/table/latest/docs/api/features/pagination#manualpagination)
 
 ##### `/cars`
 
