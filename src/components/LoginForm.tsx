@@ -1,7 +1,5 @@
 "use client";
 import Cookies from "js-cookie";
-import { UserContext } from "@/UserContext";
-import { useContext } from "react";
 import { useNavigate } from "react-router";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,9 +35,6 @@ const formSchema = z.object({
 });
 
 const LoginForm = () => {
-	const userContext = useContext(UserContext);
-	const login = userContext?.login;
-	if (!login) throw new Error("UserContext is not provided");
 	const navigate = useNavigate();
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -52,7 +47,7 @@ const LoginForm = () => {
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		try {
-			const response = await fetch("/login", {
+			const response = await fetch("/api/administrators/", {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
@@ -63,11 +58,9 @@ const LoginForm = () => {
 			if (response.ok) {
 				const token = Cookies.get("administrator-token");
 				if (token) {
-					login(token);
-
 					try {
 						const response = await fetch(
-							`http://localhost:8080/administrator/username/${token}`
+							`/api/administrators/${token}`
 						);
 						if (response.ok) {
 							const username = await response.text();
@@ -76,8 +69,7 @@ const LoginForm = () => {
 					} catch {
 						throw new Error("Username not found.");
 					}
-
-					navigate("/cars");
+					navigate("/users");
 				}
 			} else if (response.status === 401) {
 				form.setError("root", {

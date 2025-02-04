@@ -11,9 +11,8 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useContext } from "react";
-import { UserContext } from "@/UserContext";
 import { useNavigate } from "react-router";
+import Cookies from "js-cookie";
 
 // Menu items.
 const items = [
@@ -40,18 +39,14 @@ const items = [
 ];
 
 export function AppSidebar() {
-	const context = useContext(UserContext);
 	const navigate = useNavigate();
-	if (!context) {
-		throw new Error("UserContext is null");
-	}
-	const { logout } = context;
 
 	const user = localStorage.getItem("username");
 
 	const handleLogout = () => {
 		navigate("/", { replace: true });
-		logout();
+		Cookies.remove("administrator-token");
+		localStorage.removeItem("username");
 	};
 
 	return (
