@@ -1,16 +1,10 @@
-import { UserContext } from "@/UserContext";
-import { useContext } from "react";
-import { Navigate } from "react-router";
+import Cookies from "js-cookie";
+import { Navigate, Outlet } from "react-router";
 
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-	const userContext = useContext(UserContext);
-	const user = userContext ? userContext.user : null;
+const ProtectedRoute = () => {
+	const token = Cookies.get("administrator-token");
 
-	if (!user && !import.meta.env.VITE_DEV) {
-		return <Navigate to="/unauthorized" replace />;
-	}
-
-	return children;
+	return token ? <Outlet /> : <Navigate to="/" replace />;
 };
 
 export default ProtectedRoute;
