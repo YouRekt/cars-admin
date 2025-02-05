@@ -16,7 +16,7 @@ export default defineConfig({
 		proxy: {
 			// Target is your backend API
 			"/api": {
-				target: "http://localhost:8080",
+				target: "https://carscorp-dhavgthqcfbbckc2.polandcentral-01.azurewebsites.net",
 				changeOrigin: true,
 				rewrite: (path) => path.replace(/^\/api/, ""),
 

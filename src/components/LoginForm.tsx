@@ -60,7 +60,12 @@ const LoginForm = () => {
 				if (token) {
 					try {
 						const response = await fetch(
-							`/api/administrators/${token}`
+							`/api/administrators/${token}`,
+							{
+								headers: {
+									Authorization: `Bearer ${token}`,
+								},
+							}
 						);
 						if (response.ok) {
 							const username = await response.text();
