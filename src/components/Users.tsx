@@ -1,4 +1,4 @@
-import { DataTable } from "@/components/data-table";
+import { DataTable } from "@/components/users/data-table";
 import SidebarButtonProvider from "@/components/SidebarButtonProvider";
 import { columns } from "@/components/users/columns";
 

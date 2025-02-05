@@ -2,11 +2,20 @@
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import EditUserForm from "@/components/users/EditUserForm";
 import { ColumnDef } from "@tanstack/react-table";
 import { Edit, Trash } from "lucide-react";
 
@@ -17,7 +26,8 @@ export type User = {
 };
 
 export const columns = (
-	handleDelete: (id: string) => void
+	handleDelete: (id: string) => void,
+	setUserAdded: (next: boolean) => void
 ): ColumnDef<User>[] => [
 	{
 		accessorKey: "id",
@@ -89,13 +99,31 @@ export const columns = (
 
 			return (
 				<div className="flex gap-4">
-					<Button
-						size="icon"
-						variant="outline"
-						onClick={() => alert(`Edit user ${id}`)}
-					>
-						<Edit />
-					</Button>
+					<Dialog>
+						<DialogTrigger asChild>
+							<Button size="icon" variant="outline">
+								<Edit />
+							</Button>
+						</DialogTrigger>
+						<DialogContent>
+							<DialogHeader>
+								<DialogTitle>
+									Edit user{" "}
+									<span className="font-mono border rounded-md p-1">
+										{id}
+									</span>
+								</DialogTitle>
+								<DialogDescription>
+									Input the user's email and click "Add" to
+									create a new User.
+								</DialogDescription>
+							</DialogHeader>
+							<EditUserForm
+								setUserAdded={setUserAdded}
+								userId={id}
+							/>
+						</DialogContent>
+					</Dialog>
 					<Button
 						size="icon"
 						variant="destructive"

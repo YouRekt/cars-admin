@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 
-const useAuth = () => {
+const useAuth: () => [string, () => void, string] = () => {
 	const token = Cookies.get("administrator-token");
 	if (!token) {
 		throw new Error("No token found");
@@ -9,7 +9,11 @@ const useAuth = () => {
 		Cookies.remove("administrator-token");
 		localStorage.removeItem("username");
 	};
+	const username = localStorage.getItem("username");
+	if (!username) {
+		throw new Error("No username found");
+	}
 
-	return [token, logout];
+	return [token, logout, username];
 };
 export default useAuth;

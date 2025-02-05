@@ -12,7 +12,7 @@ import {
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useNavigate } from "react-router";
-import Cookies from "js-cookie";
+import useAuth from "@/hooks/use-auth";
 
 // Menu items.
 const items = [
@@ -41,20 +41,19 @@ const items = [
 export function AppSidebar() {
 	const navigate = useNavigate();
 
-	const user = localStorage.getItem("username");
+	const [, logout, username] = useAuth();
 
 	const handleLogout = () => {
 		navigate("/", { replace: true });
-		Cookies.remove("administrator-token");
-		localStorage.removeItem("username");
+		logout();
 	};
 
 	return (
 		<Sidebar>
 			<SidebarHeader>
 				<img src="/logo.svg" alt="Logo" />
-				{user && (
-					<h1 className="text-2xl text-app-primary font-medium text-center">{`Hello, ${user}!`}</h1>
+				{username && (
+					<h1 className="text-2xl text-app-primary font-medium text-center">{`Hello, ${username}!`}</h1>
 				)}
 			</SidebarHeader>
 			<SidebarContent>
