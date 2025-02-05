@@ -34,7 +34,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { PlusCircle } from "lucide-react";
+import { Loader, PlusCircle } from "lucide-react";
 import {
 	Dialog,
 	DialogContent,
@@ -65,6 +65,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 	const [pageIndex, setPageIndex] = useState(0);
 	const [pageSize, setPageSize] = useState(10);
 	const [userAdded, setUserAdded] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleDelete = async (userId: string) => {
 		const response = await fetch(`/api/customers/${userId}`, {
@@ -86,6 +87,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 
 	const fetchData = useCallback(
 		async ({ page, size }: { page: number; size: number }) => {
+			setIsLoading(true);
 			const response = await fetch(
 				`/api/customers/?page=${page}&size=${size}`,
 				{
@@ -96,7 +98,8 @@ export function DataTable<TData extends { id: string }, TValue>({
 			);
 			const pageData = await response.json();
 			setData(pageData.content);
-			setPageCount(pageData.totalPages);
+			setPageCount(pageData.page.totalPages);
+			setIsLoading(false);
 		},
 		[id]
 	);
@@ -251,10 +254,25 @@ export function DataTable<TData extends { id: string }, TValue>({
 									))}
 								</TableRow>
 							))
+						) : isLoading ? (
+							<TableRow>
+								<TableCell
+									colSpan={
+										columns(handleDelete, setUserAdded)
+											.length
+									}
+									className="h-24 text-center"
+								>
+									<Loader />
+								</TableCell>
+							</TableRow>
 						) : (
 							<TableRow>
 								<TableCell
-									colSpan={columns.length}
+									colSpan={
+										columns(handleDelete, setUserAdded)
+											.length
+									}
 									className="h-24 text-center"
 								>
 									No results.
