@@ -34,21 +34,37 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { PlusCircle } from "lucide-react";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogHeader,
+	DialogTitle,
+	DialogTrigger,
+} from "@/components/ui/dialog";
+import AddUserForm from "@/components/users/AddUserForm";
+import { useToast } from "@/hooks/use-toast";
 
 interface DataTableProps<TData extends { id: string }, TValue> {
-	columns: (handleDelete: (id: string) => void) => ColumnDef<TData, TValue>[];
+	columns: (
+		handleDelete: (id: string) => void,
+		setUserAdded: (next: boolean) => void
+	) => ColumnDef<TData, TValue>[];
 }
 
 export function DataTable<TData extends { id: string }, TValue>({
 	columns,
 }: DataTableProps<TData, TValue>) {
 	const [id] = useAuth();
+	const { toast } = useToast();
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
 	const [data, setData] = useState<TData[]>([]);
 	const [pageCount, setPageCount] = useState(0);
 	const [pageIndex, setPageIndex] = useState(0);
 	const [pageSize, setPageSize] = useState(10);
+	const [userAdded, setUserAdded] = useState(false);
 
 	const handleDelete = async (userId: string) => {
 		const response = await fetch(`/api/customers/${userId}`, {
@@ -61,6 +77,11 @@ export function DataTable<TData extends { id: string }, TValue>({
 		if (response.ok) {
 			setData((data) => data.filter((d) => d.id !== userId));
 		}
+
+		toast({
+			title: "User removed",
+			description: `User ${userId} removed.`,
+		});
 	};
 
 	const fetchData = useCallback(
@@ -82,11 +103,12 @@ export function DataTable<TData extends { id: string }, TValue>({
 
 	useEffect(() => {
 		fetchData({ page: pageIndex, size: pageSize });
-	}, [fetchData, pageIndex, pageSize]);
+		setUserAdded(false);
+	}, [fetchData, pageIndex, pageSize, userAdded]);
 
 	const table = useReactTable({
 		data,
-		columns: columns(handleDelete),
+		columns: columns(handleDelete, setUserAdded),
 		getCoreRowModel: getCoreRowModel(),
 		onColumnFiltersChange: setColumnFilters,
 		getFilteredRowModel: getFilteredRowModel(),
@@ -144,7 +166,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 
 	return (
 		<div>
-			<div className="flex items-center py-4 gap-4">
+			<div className="flex py-4 gap-4">
 				<Input
 					placeholder="Filter emails..."
 					value={
@@ -171,6 +193,23 @@ export function DataTable<TData extends { id: string }, TValue>({
 						))}
 					</SelectContent>
 				</Select>
+				<Dialog>
+					<DialogTrigger asChild>
+						<Button className="ml-auto">
+							<PlusCircle /> Add User
+						</Button>
+					</DialogTrigger>
+					<DialogContent className="sm:max-w-md">
+						<DialogHeader>
+							<DialogTitle>Add User</DialogTitle>
+							<DialogDescription>
+								Input the user's email and click "Add" to create
+								a new User.
+							</DialogDescription>
+						</DialogHeader>
+						<AddUserForm setUserAdded={setUserAdded} />
+					</DialogContent>
+				</Dialog>
 			</div>
 			<div className="rounded-md border">
 				<Table>

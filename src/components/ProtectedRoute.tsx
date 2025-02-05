@@ -1,8 +1,8 @@
-import Cookies from "js-cookie";
+import useAuth from "@/hooks/use-auth";
 import { Navigate, Outlet } from "react-router";
 
 const ProtectedRoute = () => {
-	const token = Cookies.get("administrator-token");
+	const token = useAuth();
 
 	return token ? <Outlet /> : <Navigate to="/" replace />;
 };
