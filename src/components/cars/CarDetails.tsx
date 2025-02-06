@@ -9,7 +9,8 @@ import {
 import { Car as CarType } from "./columns";
 
 const CarDetails = ({ car }: { car: CarType }) => {
-	const { model, location, imageUrl } = car;
+
+const { model, location, imageUrl } = car;
 
 	return (
 		<div className="p-4 flex flex-col gap-4">

@@ -52,6 +52,7 @@ import {
 
 import { Button } from "@/components/ui/button"
 import AddCarForm from "@/components/cars/AddCarForm";
+import ImageUploader from "@/components/ImageUploader";
 
 interface DataTableProps<TData, TValue> {
     columns: (
@@ -213,6 +214,19 @@ export function DataTable<TData extends { id: string }, TValue>({
                         ))}
                     </SelectContent>
                 </Select>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button className="ml-auto">
+                            <PlusCircle /> Add Image
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                            <DialogTitle>Add Image</DialogTitle>
+                        </DialogHeader>
+                        <ImageUploader />
+                    </DialogContent>
+                </Dialog>
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button className="ml-auto">

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,9 +16,11 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { DialogClose } from "@/components/ui/dialog";
 import useAuth from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import ImageUploader from "../ImageUploader";
 
 const formSchema = z.object({
     modelId: z.string().uuid(),
@@ -25,22 +28,52 @@ const formSchema = z.object({
     imageId: z.string().uuid(),
 });
 
-const AddCarForm = ({
-    setCarAdded,
-}: {
-    setCarAdded: (next: boolean) => void;
-}) => {
+const AddCarForm = ({ setCarAdded }: { setCarAdded: (next: boolean) => void }) => {
+    const [id] = useAuth();
+    const { toast } = useToast();
+    const [images, setImages] = useState<{ id: string; url: string }[]>([]);
+    const [loadingImages, setLoadingImages] = useState(false);
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            modelId: "89505274-4115-4ded-b478-5c88a3e7fecd", // DEFAULT HONDA-CIVIC FOR NOW
-            locationId: "39fcf399-950f-4e57-a8ad-f8c4f51970e7", // SOME DEFAULT LOCATION @ /api/locations/
-            imageId: "31784896-6326-441b-8b58-4688ecc41f9a" // SOME DEFAULT IMAGEID
+            modelId: "89505274-4115-4ded-b478-5c88a3e7fecd",
+            locationId: "39fcf399-950f-4e57-a8ad-f8c4f51970e7",
+            imageId: "",
         },
     });
-    const [id] = useAuth();
-    const { toast } = useToast();
 
+    // Fetch images from the API
+    useEffect(() => {
+        const fetchImages = async () => {
+            setLoadingImages(true);
+            try {
+                const response = await fetch("/api/images/", {
+                    headers: {
+                        Authorization: `Bearer ${id}`,
+                    },
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch images.");
+
+                const data = await response.json(); // Response: { id: string, url: string }[]
+                setImages(data);
+            } catch (error) {
+                console.error(error);
+                toast({
+                    title: "Error",
+                    description: "Could not fetch images.",
+                    variant: "destructive",
+                });
+            } finally {
+                setLoadingImages(false);
+            }
+        };
+
+        fetchImages();
+    }, [id, toast]);
+
+    // Handle form submission
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const response = await fetch("/api/cars/", {
             method: "POST",
@@ -57,13 +90,14 @@ const AddCarForm = ({
                 title: "Car created",
                 description: `Created car ${values.modelId} successfully.`,
             });
-        } else
+            setCarAdded(true);
+        } else {
             toast({
                 title: "Car creation failed",
                 description: `Failed to create car ${values.modelId}.`,
+                variant: "destructive",
             });
-
-        setCarAdded(true);
+        }
     }
 
     return (
@@ -81,9 +115,7 @@ const AddCarForm = ({
                                     {...field}
                                 />
                             </FormControl>
-                            <FormDescription>
-                                This is the car's ID.
-                            </FormDescription>
+                            <FormDescription>This is the car's ID.</FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}
@@ -100,28 +132,50 @@ const AddCarForm = ({
                                     {...field}
                                 />
                             </FormControl>
-                            <FormDescription>
-                                This is the car's Location ID.
-                            </FormDescription>
+                            <FormDescription>This is the car's Location ID.</FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}
                 />
+
+                {/* Image selection dropdown */}
                 <FormField
                     control={form.control}
                     name="imageId"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Image ID</FormLabel>
+                            <FormLabel>Image</FormLabel>
                             <FormControl>
-                                <Input
-                                    placeholder="00000000-0000-0000-0000-000000000000"
-                                    {...field}
-                                />
+                                <Select
+                                    onValueChange={field.onChange}
+                                    value={field.value || ""}
+                                >
+                                    <SelectTrigger>
+                                        <SelectValue placeholder="Select an image" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {loadingImages ? (
+                                            <SelectItem value="loading" disabled>Loading...</SelectItem>
+                                        ) : images.length > 0 ? (
+                                            images.map((img) => (
+                                                <SelectItem key={img.id} value={img.id}>
+                                                    <div className="flex items-center gap-2">
+                                                        <img
+                                                            src={img.url}
+                                                            alt="Car"
+                                                            className="w-10 h-10 rounded-md"
+                                                        />
+                                                        {img.id}
+                                                    </div>
+                                                </SelectItem>
+                                            ))
+                                        ) : (
+                                            <SelectItem value="no-images" disabled>No images found</SelectItem>
+                                        )}
+                                    </SelectContent>
+                                </Select>
                             </FormControl>
-                            <FormDescription>
-                                This is the car's image ID.
-                            </FormDescription>
+                            <FormDescription>Select an existing image or upload a new one.</FormDescription>
                             <FormMessage />
                         </FormItem>
                     )}
