@@ -20,7 +20,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { DialogClose } from "@/components/ui/dialog";
 import useAuth from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
-import ImageUploader from "../ImageUploader";
 
 const formSchema = z.object({
     modelId: z.string().uuid(),
