@@ -1,57 +1,106 @@
-import { MapPin, Car as CarIcon, Fuel, Calendar, Users, DollarSign, Mail, XCircle, CheckCircle } from "lucide-react";
-import { Rental } from "./columns"
+import {
+	MapPin,
+	Fuel,
+	Calendar,
+	Users,
+	DollarSign,
+	Mail,
+	XCircle,
+	CheckCircle,
+	DoorOpen,
+	AtSign,
+} from "lucide-react";
+import { Rental } from "./columns";
 
 const RentalInfo = ({ rental }: { rental: Rental }) => {
+	const { car, customer, startAt, endAt, isCancelled } = rental;
+	const { model, location, imageUrl } = car;
 
-    const { car, customer, startAt, endAt, isCancelled } = rental;
-    const { model, location, imageUrl } = car;
-
-    return (
-
-        <div className="p-4">
-            {imageUrl && (
-                <img
-                    src={imageUrl}
-                    alt={`${model.brandName} ${model.name}`}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
-                />
-            )}
-            <h2 className="text-xl font-bold mb-2 flex items-center">
-                <CarIcon className="mr-2" /> {model.brandName} - {model.name}
-            </h2>
-            <p className="text-gray-700 flex items-center">
-                <Calendar className="mr-2" /> Year: {model.productionYear}
-            </p>
-            <p className="text-gray-700 flex items-center">
-                <Fuel className="mr-2" /> Fuel: {model.fuelType} ({model.fuelCapacity}L)
-            </p>
-            <p className="text-gray-700 flex items-center">
-                <Users className="mr-2" /> Seats: {model.seatCount} | Doors: {model.doorCount}
-            </p>
-            <p className="text-gray-700 flex items-center">
-                <DollarSign className="mr-2" /> Daily Rate: ${model.dailyRate.toFixed(2)}
-            </p>
-            <h3 className="text-lg font-semibold mt-4 flex items-center">
-                <MapPin className="mr-2" /> Location
-            </h3>
-            <p className="text-gray-700">{location.fullAddress}</p>
-            <p className="text-gray-700">Lat: {location.latitude}, Long: {location.longitude}</p>
-            <h3 className="text-lg font-semibold mt-4 flex items-center">
-                <Mail className="mr-2" /> Customer
-            </h3>
-            <p className="text-gray-700">{customer.email}</p>
-            <h3 className="text-lg font-semibold mt-4 flex items-center">
-                <Calendar className="mr-2" /> Rental Period
-            </h3>
-            <p className="text-gray-700">Start: {startAt ? new Date(startAt).toLocaleString() : "N/A"}</p>
-            <p className="text-gray-700">End: {endAt ? new Date(endAt).toLocaleString() : "N/A"}</p>
-            <h3 className="text-lg font-semibold mt-4 flex items-center">
-                {isCancelled ? <XCircle className="mr-2 text-red-500" /> : <CheckCircle className="mr-2 text-green-500" />}
-                Status: {isCancelled ? "Cancelled" : "Active"}
-            </h3>
-        </div>
-
-    );
+	return (
+		<div className="p-4 flex flex-col gap-4">
+			{imageUrl && (
+				<img
+					src={imageUrl}
+					alt={`${model.brandName} ${model.name}`}
+					className="w-full h-48 object-cover rounded-lg mb-4"
+				/>
+			)}
+			<h2 className="text-xl font-bold mb-2 flex items-center">
+				{`${model.brandName} - ${model.name}`}
+			</h2>
+			<p className="text-accent-foreground flex gap-2">
+				<Calendar color="#004EEB" />{" "}
+				<span className="font-semibold">Production Year: </span>{" "}
+				{`${model.productionYear}`}
+			</p>
+			<p className="text-accent-foreground flex gap-2">
+				<Fuel color="#004EEB" />{" "}
+				<span className="font-semibold">Fuel Type:</span>
+				{`${model.fuelType} (Capactity: ${model.fuelCapacity} L)`}
+			</p>
+			<p className="text-accent-foreground flex gap-2">
+				<Users color="#004EEB" />
+				<span className="font-semibold">Seats:</span> {model.seatCount}
+			</p>
+			<p className="text-accent-foreground flex gap-2">
+				<DoorOpen color="#004EEB" />{" "}
+				<span className="font-semibold">Doors: </span>
+				{model.doorCount}
+			</p>
+			<p className="text-accent-foreground flex gap-2">
+				<DollarSign color="#004EEB" />
+				<span className="font-semibold">Daily Rate: </span>
+				{new Intl.NumberFormat("pl-PL", {
+					style: "currency",
+					currency: "PLN",
+				}).format(model.dailyRate)}
+			</p>
+			<h3 className="text-lg text-accent-foreground font-semibold flex gap-2 items-center">
+				<MapPin color="#004EEB" /> Location
+			</h3>
+			<p className="text-accent-foreground">{location.fullAddress}</p>
+			<p className="text-accent-foreground">
+				<span className="font-semibold">Latitude: </span>
+				{location.latitude},{" "}
+				<span className="font-semibold">Longitude:</span>{" "}
+				{location.longitude}
+			</p>
+			<h3 className="text-lg text-accent-foreground font-semibold flex gap-2 items-center">
+				<AtSign color="#004EEB" /> Customer
+			</h3>
+			<p className="text-accent-foreground flex gap-2">
+				<span className="font-semibold">E-mail: </span>
+				{customer.email}
+			</p>
+			<h3 className="text-lg text-accent-foreground font-semibold flex gap-2 items-center">
+				<Calendar color="#004EEB" /> Rental Period
+			</h3>
+			<p className="text-accent-foreground flex gap-2">
+				<span className="font-semibold">Start: </span>
+				{new Intl.DateTimeFormat("pl-PL", {
+					dateStyle: "short",
+					timeStyle: "short",
+					timeZone: "Europe/Warsaw",
+				}).format(new Date(startAt as string))}
+			</p>
+			<p className="text-accent-foreground flex gap-2">
+				<span className="font-semibold">End: </span>
+				{new Intl.DateTimeFormat("pl-PL", {
+					dateStyle: "short",
+					timeStyle: "short",
+					timeZone: "Europe/Warsaw",
+				}).format(new Date(endAt as string))}
+			</p>
+			<h3 className="text-lg font-semibold mt-4 flex items-center">
+				{isCancelled ? (
+					<XCircle className="mr-2 text-app-error" />
+				) : (
+					<CheckCircle className="mr-2 text-app-success" />
+				)}
+				Status: {isCancelled ? "Cancelled" : "Active"}
+			</h3>
+		</div>
+	);
 };
 
 export default RentalInfo;
