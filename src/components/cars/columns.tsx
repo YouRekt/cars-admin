@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
-import { Edit, Trash } from "lucide-react";
+import { Edit, Info, Trash } from "lucide-react";
 
 import {
     Tooltip,
@@ -21,6 +21,7 @@ import {
 
 import EditCarForm from "./EditCarForm";
 import { AlertDialog, AlertDialogCancel, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
+import CarDetails from "./CarDetails";
 
 export type Model = {
     id: string
@@ -200,6 +201,16 @@ export const columns = (
 							</AlertDialogFooter>
 						</AlertDialogContent>
 					</AlertDialog>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button size="icon" variant="outline">
+                                <Info />
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <CarDetails car={row.original}/>
+                        </DialogContent>
+                    </Dialog>
                     </div>
                 )
             }

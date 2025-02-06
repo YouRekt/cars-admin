@@ -6,7 +6,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/
 import { Checkbox } from "../ui/checkbox"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog"
 import { Button } from "../ui/button"
-import { Accessibility, CircleX } from "lucide-react"
+import { Accessibility, CircleX, Info } from "lucide-react"
+import { Dialog, DialogHeader, DialogContent, DialogTitle, DialogTrigger } from "../ui/dialog"
+import { Input } from "../ui/input"
+import RentalDetails from "./RentalDetails"
 
 export type Customer = {
     id: string
@@ -140,41 +143,53 @@ export const columns = (
             cell: ({ row }) => {
                 const id: string = row.getValue("id");
 
-                return !row.original.isCancelled ? (
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button size="icon" variant="destructive">
-                                <CircleX />
+                return <div className="flex gap-4">
+                    {!row.original.isCancelled ? (
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button size="icon" variant="destructive">
+                                    <CircleX />
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                        Are you absolutely sure?
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will
+                                        permanently delete the rental.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogAction
+                                        asChild
+                                        className="bg-destructive hover:bg-destructive"
+                                    >
+                                        <Button onClick={() => handleDelete(id)}>
+                                            Delete
+                                        </Button>
+                                    </AlertDialogAction>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    ) : (
+                        <Button size="icon" variant="destructive" disabled>
+                            <Accessibility />
+                        </Button>
+                    )}
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button size="icon" variant="outline">
+                                <Info />
                             </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                    Are you absolutely sure?
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    This action cannot be undone. This will
-                                    permanently delete the rental.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogAction
-                                    asChild
-                                    className="bg-destructive hover:bg-destructive"
-                                >
-                                    <Button onClick={() => handleDelete(id)}>
-                                        Delete
-                                    </Button>
-                                </AlertDialogAction>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                ) : (
-                    <Button size="icon" variant="destructive" disabled>
-                        <Accessibility />
-                    </Button>
-                )
+                        </DialogTrigger>
+                        <DialogContent>
+                            <RentalDetails rental={row.original} />
+                        </DialogContent>
+                    </Dialog>
+                </div>
             }
         },
     ]
