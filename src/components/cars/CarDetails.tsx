@@ -2,7 +2,7 @@ import { Calendar, Car, DollarSign, Fuel, MapPin, Users } from "lucide-react";
 import { Car as CarType } from "./columns"
 
 const CarDetails = ({ car }: { car: CarType }) => {
-    const { id, model, location, imageUrl } = car;
+    const { model, location, imageUrl } = car;
 
     return (
         <div className="p-4">

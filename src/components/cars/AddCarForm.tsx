@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { DialogClose } from "@/components/ui/dialog";
 import useAuth from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import ImageUploader from "../ImageUploader";
 
 const formSchema = z.object({
     modelId: z.string().uuid(),
@@ -126,6 +127,7 @@ const AddCarForm = ({
                         </FormItem>
                     )}
                 />
+                <ImageUploader/>
                 <div className="flex justify-between">
                     {form.formState.isValid ? (
                         <DialogClose>
