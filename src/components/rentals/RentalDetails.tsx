@@ -4,7 +4,6 @@ import {
 	Calendar,
 	Users,
 	DollarSign,
-	Mail,
 	XCircle,
 	CheckCircle,
 	DoorOpen,
