@@ -111,13 +111,24 @@ const EditModelForm = ({
 		fetchBrands();
 		fetchFuelTypes();
 	}, [fetchBrands, fetchFuelTypes, fetchModel]);
-
 	useEffect(() => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		//@ts-expect-error
 		form.setValue("name", model?.name);
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		//@ts-expect-error
 		form.setValue("productionYear", model?.productionYear);
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		//@ts-expect-error
 		form.setValue("fuelCapacity", model?.fuelCapacity);
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		//@ts-expect-error
 		form.setValue("seatCount", model?.seatCount);
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		//@ts-expect-error
 		form.setValue("doorCount", model?.doorCount);
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		//@ts-expect-error
 		form.setValue("dailyRate", model?.dailyRate);
 	}, [model, form]);
 
