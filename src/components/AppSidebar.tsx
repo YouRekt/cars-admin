@@ -83,14 +83,10 @@ export function AppSidebar() {
 						<SidebarMenu>
 							<SidebarMenuItem>
 								<SidebarMenuButton
-									asChild
-									className="hover:bg-app-secondary hover:text-white font-medium text-lg [&>svg]:size-6"
+									className="hover:bg-secondary hover:text-white font-medium text-lg [&>svg]:size-6"
 									onClick={handleLogout}
 								>
-									<div>
-										<LogOut />
-										<span>Log out</span>
-									</div>
+									<LogOut /> Log out
 								</SidebarMenuButton>
 							</SidebarMenuItem>
 						</SidebarMenu>
