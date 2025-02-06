@@ -81,15 +81,24 @@ export function DataTable<TData extends { id: string }, TValue>({
                 Authorization: `Bearer ${id}`,
             },
         });
-
+        console.log(response)
         if (response.ok) {
-            setData((data) => data.filter((d) => d.id !== carId));
+            setCarAdded(true);
+            toast({
+                title: "Car removed",
+                description: `Car ${carId} removed.`
+            })
+        } else if (response.status == 409) {
+            toast({
+                title: "Could not remove car",
+                description: `Car ${carId} was not removed due to it being currently rented.`
+            })
+        } else {
+            toast({
+                title: "Unknown error",
+                description: `Error is not defined in code: status${response.status}`
+            })
         }
-
-        toast({
-            title: "Car removed",
-            description: `Car ${carId} removed.`
-        })
     }
 
     const fetchData = useCallback(
