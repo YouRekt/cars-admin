@@ -48,6 +48,7 @@ import {
 	DropdownMenuContent,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import BrandUploader from "@/components/BrandAdder";
 
 interface DataTableProps<TData extends { id: string }, TValue> {
 	columns: (
@@ -208,6 +209,23 @@ export function DataTable<TData extends { id: string }, TValue>({
 							})}
 					</DropdownMenuContent>
 				</DropdownMenu>
+				<Dialog>
+					<DialogTrigger asChild>
+						<Button className="ml-auto">
+							<PlusCircle /> Add Brand
+						</Button>
+					</DialogTrigger>
+					<DialogContent className="sm:max-w-md">
+						<DialogHeader>
+							<DialogTitle>Add Brand</DialogTitle>
+							<DialogDescription>
+								Input the brand's details and click Submit to
+								create a new Brand.
+							</DialogDescription>
+						</DialogHeader>
+						<BrandUploader/>
+					</DialogContent>
+				</Dialog>
 				<Dialog>
 					<DialogTrigger asChild>
 						<Button className="ml-auto">
