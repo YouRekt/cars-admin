@@ -77,7 +77,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 		});
 
 		if (response.ok) {
-			setData((data) => data.filter((d) => d.id !== userId));
+			setUserAdded(true);
 		}
 
 		toast({
