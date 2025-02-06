@@ -1,4 +1,11 @@
-import { Car, FilePenLine, LogOut, ShieldCheck, User } from "lucide-react";
+import {
+	Car,
+	FilePenLine,
+	LogOut,
+	Package,
+	ShieldCheck,
+	User,
+} from "lucide-react";
 
 import {
 	Sidebar,
@@ -20,6 +27,11 @@ const items = [
 		title: "Users",
 		url: "/users",
 		icon: User,
+	},
+	{
+		title: "Models",
+		url: "/models",
+		icon: Package,
 	},
 	{
 		title: "Cars",

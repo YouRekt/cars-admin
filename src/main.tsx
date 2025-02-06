@@ -10,6 +10,7 @@ import Administrators from "@/components/Administrators";
 import Users from "@/components/Users";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import SidebarButtonProvider from "@/components/SidebarButtonProvider";
+import Models from "@/components/Models";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById("root")!).render(
 					<Route element={<DashboardLayout />}>
 						<Route element={<SidebarButtonProvider />}>
 							<Route path="users" element={<Users />} />
+							<Route path="models" element={<Models />} />
 							<Route path="cars" element={<Cars />} />
 							<Route path="rentals" element={<Rentals />} />
 							<Route

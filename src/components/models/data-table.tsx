@@ -6,7 +6,9 @@ import {
 	flexRender,
 	getCoreRowModel,
 	getFilteredRowModel,
+	getPaginationRowModel,
 	useReactTable,
+	VisibilityState,
 } from "@tanstack/react-table";
 
 import {
@@ -27,13 +29,7 @@ import {
 	PaginationItem,
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
+
 import { PlusCircle } from "lucide-react";
 import {
 	Dialog,
@@ -43,14 +39,20 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import AddAdministratorForm from "@/components/administrators/AddAdministratorForm";
+import AddModelForm from "@/components/models/AddModelForm";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+	DropdownMenu,
+	DropdownMenuCheckboxItem,
+	DropdownMenuContent,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface DataTableProps<TData extends { id: string }, TValue> {
 	columns: (
 		handleDelete: (id: string) => void,
-		setAdministratorAdded: (next: boolean) => void
+		setModelAdded: (next: boolean) => void
 	) => ColumnDef<TData, TValue>[];
 }
 
@@ -60,16 +62,16 @@ export function DataTable<TData extends { id: string }, TValue>({
 	const [id] = useAuth();
 	const { toast } = useToast();
 	const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+	const [columnVisibility, setColumnVisibility] = useState<VisibilityState>(
+		{}
+	);
 
 	const [data, setData] = useState<TData[]>([]);
-	const [pageCount, setPageCount] = useState(0);
-	const [pageIndex, setPageIndex] = useState(0);
-	const [pageSize, setPageSize] = useState(10);
-	const [administratorAdded, setAdministratorAdded] = useState(false);
-	const [isLoading, setIsLoading] = useState(false);
+	const [modelAdded, setModelAdded] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 
-	const handleDelete = async (administratorId: string) => {
-		const response = await fetch(`/api/administrators/${administratorId}`, {
+	const handleDelete = async (modelId: string) => {
+		const response = await fetch(`/api/models/${modelId}`, {
 			method: "DELETE",
 			headers: {
 				Authorization: `Bearer ${id}`,
@@ -77,65 +79,63 @@ export function DataTable<TData extends { id: string }, TValue>({
 		});
 
 		if (response.ok) {
-			setAdministratorAdded(true);
+			setModelAdded(true);
+			toast({
+				title: "Model removed",
+				description: `Model ${modelId} removed.`,
+			});
+		} else {
+			toast({
+				title: "Error removing model",
+				description: `Failed to remove model ${modelId} due to a car being based on it.`,
+			});
 		}
-
-		toast({
-			title: "Administrator removed",
-			description: `Administrator ${administratorId} removed.`,
-		});
 	};
 
-	const fetchData = useCallback(
-		async ({ page, size }: { page: number; size: number }) => {
-			setIsLoading(true);
-			const response = await fetch(
-				`/api/administrators/?page=${page}&size=${size}`,
-				{
-					headers: {
-						Authorization: `Bearer ${id}`,
-					},
-				}
-			);
-			const pageData = await response.json();
-			setData(pageData.content);
-			setPageCount(pageData.page.totalPages);
-			setIsLoading(false);
-		},
-		[id]
-	);
+	const fetchData = useCallback(async () => {
+		const response = await fetch("/api/models/", {
+			headers: {
+				Authorization: `Bearer ${id}`,
+			},
+		});
+		const data = await response.json();
+		setData(data);
+		setIsLoading(false);
+	}, [id]);
 
 	useEffect(() => {
-		fetchData({ page: pageIndex, size: pageSize });
-		setAdministratorAdded(false);
-	}, [fetchData, pageIndex, pageSize, administratorAdded]);
+		fetchData();
+		setModelAdded(false);
+	}, [fetchData, modelAdded]);
 
 	const table = useReactTable({
 		data,
-		columns: columns(handleDelete, setAdministratorAdded),
+		columns: columns(handleDelete, setModelAdded),
 		getCoreRowModel: getCoreRowModel(),
 		onColumnFiltersChange: setColumnFilters,
 		getFilteredRowModel: getFilteredRowModel(),
-		manualPagination: true,
-		pageCount: pageCount,
+		getPaginationRowModel: getPaginationRowModel(),
+		onColumnVisibilityChange: setColumnVisibility,
 		state: {
+			columnVisibility,
 			columnFilters,
 		},
 	});
 
+	const currentPage = table.getState().pagination.pageIndex;
+
 	const generatePagination = () => {
 		return (
 			<>
-				{Array.from({ length: pageCount })
+				{Array.from({ length: table.getPageCount() })
 					.map((_, i) => {
 						const pageNumber = i + 1;
-						const isCurrentPage = pageIndex === i;
+						const isCurrentPage = currentPage === i;
 
 						return (
 							<PaginationItem key={i}>
 								<Button
 									onClick={() => {
-										setPageIndex(i);
 										table.setPageIndex(i);
 									}}
 									variant={
@@ -149,18 +149,18 @@ export function DataTable<TData extends { id: string }, TValue>({
 					})
 					.filter((_, i) => {
 						const groupSize = 3;
-						const totalPages = pageCount;
+						const totalPages = table.getPageCount();
 						const lastGroupStart = Math.max(
 							totalPages - (totalPages % groupSize || groupSize),
 							0
 						);
 						if (totalPages <= groupSize) return true;
-						if (pageIndex >= lastGroupStart) {
+						if (currentPage >= lastGroupStart) {
 							return i >= lastGroupStart - 2;
 						} else {
 							return (
 								Math.floor(i / groupSize) ===
-								Math.floor(pageIndex / groupSize)
+								Math.floor(currentPage / groupSize)
 							);
 						}
 					})}
@@ -172,48 +172,57 @@ export function DataTable<TData extends { id: string }, TValue>({
 		<div>
 			<div className="flex py-4 gap-4">
 				<Input
-					placeholder="Filter usernames..."
+					placeholder="Filter models..."
 					value={
-						(table
-							.getColumn("username")
-							?.getFilterValue() as string) ?? ""
+						(table.getColumn("name")?.getFilterValue() as string) ??
+						""
 					}
 					onChange={(event) =>
 						table
-							.getColumn("username")
+							.getColumn("name")
 							?.setFilterValue(event.target.value)
 					}
 					className="max-w-sm"
 				/>
-				<Select onValueChange={(value) => setPageSize(parseInt(value))}>
-					<SelectTrigger className="w-[180px]">
-						<SelectValue placeholder={pageSize} />
-					</SelectTrigger>
-					<SelectContent>
-						{[10, 25, 50, 100].map((size) => (
-							<SelectItem key={size} value={`${size}`}>
-								{size}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<Button variant="outline">Columns</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent align="end">
+						{table
+							.getAllColumns()
+							.filter((column) => column.getCanHide())
+							.map((column) => {
+								return (
+									<DropdownMenuCheckboxItem
+										key={column.id}
+										className="capitalize"
+										checked={column.getIsVisible()}
+										onCheckedChange={(value) =>
+											column.toggleVisibility(!!value)
+										}
+									>
+										{column.id}
+									</DropdownMenuCheckboxItem>
+								);
+							})}
+					</DropdownMenuContent>
+				</DropdownMenu>
 				<Dialog>
 					<DialogTrigger asChild>
 						<Button className="ml-auto">
-							<PlusCircle /> Add Administrator
+							<PlusCircle /> Add Model
 						</Button>
 					</DialogTrigger>
 					<DialogContent className="sm:max-w-md">
 						<DialogHeader>
-							<DialogTitle>Add Administrator</DialogTitle>
+							<DialogTitle>Add Model</DialogTitle>
 							<DialogDescription>
-								Input the administrator's email and click "Add"
-								to create a new Administrator.
+								Input the model's details and click Submit to
+								create a new Model.
 							</DialogDescription>
 						</DialogHeader>
-						<AddAdministratorForm
-							setAdministratorAdded={setAdministratorAdded}
-						/>
+						<AddModelForm setModelAdded={setModelAdded} />
 					</DialogContent>
 				</Dialog>
 			</div>
@@ -266,6 +275,27 @@ export function DataTable<TData extends { id: string }, TValue>({
 									<Skeleton className="h-4 w-32" />
 								</TableCell>
 								<TableCell>
+									<Skeleton className="h-4 w-28" />
+								</TableCell>
+								<TableCell>
+									<Skeleton className="h-4 w-12" />
+								</TableCell>
+								<TableCell>
+									<Skeleton className="h-4 w-12" />
+								</TableCell>
+								<TableCell>
+									<Skeleton className="h-4 w-12" />
+								</TableCell>
+								<TableCell>
+									<Skeleton className="h-4 w-12" />
+								</TableCell>
+								<TableCell>
+									<Skeleton className="h-4 w-12" />
+								</TableCell>
+								<TableCell>
+									<Skeleton className="h-4 w-12" />
+								</TableCell>
+								<TableCell>
 									<div className="flex gap-4">
 										<Skeleton className="h-10 w-10" />
 										<Skeleton className="h-10 w-10" />
@@ -276,10 +306,8 @@ export function DataTable<TData extends { id: string }, TValue>({
 							<TableRow>
 								<TableCell
 									colSpan={
-										columns(
-											handleDelete,
-											setAdministratorAdded
-										).length
+										columns(handleDelete, setModelAdded)
+											.length
 									}
 									className="h-24 text-center"
 								>
@@ -299,31 +327,30 @@ export function DataTable<TData extends { id: string }, TValue>({
 								size="sm"
 								onClick={() => {
 									table.previousPage();
-									setPageIndex((p) => p - 1);
 								}}
 								disabled={!table.getCanPreviousPage()}
 							>
 								Previous
 							</Button>
 						</PaginationItem>
-						{pageIndex > 2 && (
+						{currentPage > 2 && (
 							<PaginationItem>
 								<PaginationEllipsis />
 							</PaginationItem>
 						)}
 						{generatePagination()}
-						{pageIndex < pageCount - 1 && pageCount > 3 && (
-							<PaginationItem>
-								<PaginationEllipsis />
-							</PaginationItem>
-						)}
+						{currentPage < table.getPageCount() - 1 &&
+							table.getPageCount() > 3 && (
+								<PaginationItem>
+									<PaginationEllipsis />
+								</PaginationItem>
+							)}
 						<PaginationItem>
 							<Button
 								variant="ghost"
 								size="sm"
 								onClick={() => {
 									table.nextPage();
-									setPageIndex((p) => p + 1);
 								}}
 								disabled={!table.getCanNextPage()}
 							>
