@@ -72,7 +72,7 @@ const AddModelForm = ({
 	const [fuelTypes, setFuelTypes] = useState<FuelType[]>([]);
 
 	const fetchBrands = useCallback(async () => {
-		const response = await fetch("/api/brands/", {
+		const response = await fetch(`${import.meta.env.API_URL}/brands/`, {
 			headers: {
 				Authorization: `Bearer ${id}`,
 			},
@@ -85,7 +85,7 @@ const AddModelForm = ({
 	}, [id]);
 
 	const fetchFuelTypes = useCallback(async () => {
-		const response = await fetch("/api/fuel-types/", {
+		const response = await fetch(`${import.meta.env.API_URL}/fuel-types/`, {
 			headers: {
 				Authorization: `Bearer ${id}`,
 			},
@@ -103,7 +103,7 @@ const AddModelForm = ({
 	}, [fetchBrands, fetchFuelTypes]);
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		const response = await fetch("/api/models/", {
+		const response = await fetch(`${import.meta.env.API_URL}/models/`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",

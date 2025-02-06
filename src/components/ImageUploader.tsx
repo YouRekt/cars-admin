@@ -44,7 +44,7 @@ export function ImageUploader() {
 		const formData = new FormData();
 		formData.append("file", values.file);
 
-		const response = await fetch("/api/images", {
+		const response = await fetch(`${import.meta.env.API_URL}/images`, {
 			method: "POST",
 			headers: {
 				Authorization: `Bearer ${id}`, // Ensure the token is valid

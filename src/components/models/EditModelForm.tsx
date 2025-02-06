@@ -54,11 +54,14 @@ const EditModelForm = ({
 	const [model, setModel] = useState<Model>();
 
 	const fetchModel = useCallback(async () => {
-		const response = await fetch(`/api/models/${modelId}`, {
-			headers: {
-				Authorization: `Bearer ${id}`,
-			},
-		});
+		const response = await fetch(
+			`${import.meta.env.API_URL}/models/${modelId}`,
+			{
+				headers: {
+					Authorization: `Bearer ${id}`,
+				},
+			}
+		);
 
 		if (response.ok) {
 			const data = await response.json();
@@ -67,7 +70,7 @@ const EditModelForm = ({
 	}, [id, modelId]);
 
 	const fetchBrands = useCallback(async () => {
-		const response = await fetch("/api/brands/", {
+		const response = await fetch(`${import.meta.env.API_URL}/brands/`, {
 			headers: {
 				Authorization: `Bearer ${id}`,
 			},
@@ -80,7 +83,7 @@ const EditModelForm = ({
 	}, [id]);
 
 	const fetchFuelTypes = useCallback(async () => {
-		const response = await fetch("/api/fuel-types/", {
+		const response = await fetch(`${import.meta.env.API_URL}/fuel-types/`, {
 			headers: {
 				Authorization: `Bearer ${id}`,
 			},
@@ -133,14 +136,17 @@ const EditModelForm = ({
 	}, [model, form]);
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		const response = await fetch(`/api/models/${modelId}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${id}`,
-			},
-			body: JSON.stringify(values),
-		});
+		const response = await fetch(
+			`${import.meta.env.API_URL}/models/${modelId}`,
+			{
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${id}`,
+				},
+				body: JSON.stringify(values),
+			}
+		);
 
 		if (response.ok) {
 			form.reset();

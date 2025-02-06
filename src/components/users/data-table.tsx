@@ -69,12 +69,15 @@ export function DataTable<TData extends { id: string }, TValue>({
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleDelete = async (userId: string) => {
-		const response = await fetch(`/api/customers/${userId}`, {
-			method: "DELETE",
-			headers: {
-				Authorization: `Bearer ${id}`,
-			},
-		});
+		const response = await fetch(
+			`${import.meta.env.API_URL}/customers/${userId}`,
+			{
+				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${id}`,
+				},
+			}
+		);
 
 		if (response.ok) {
 			setUserAdded(true);
@@ -90,7 +93,9 @@ export function DataTable<TData extends { id: string }, TValue>({
 		async ({ page, size }: { page: number; size: number }) => {
 			setIsLoading(true);
 			const response = await fetch(
-				`/api/customers/?page=${page}&size=${size}`,
+				`${
+					import.meta.env.API_URL
+				}/customers/?page=${page}&size=${size}`,
 				{
 					headers: {
 						Authorization: `Bearer ${id}`,
