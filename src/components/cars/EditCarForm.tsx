@@ -85,7 +85,7 @@ const EditCarForm = ({
                                 />
                             </FormControl>
                             <FormDescription>
-                                This is the car's ID.
+                                This is the current car's model ID.
                             </FormDescription>
                             <FormMessage />
                         </FormItem>

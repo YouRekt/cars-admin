@@ -31,21 +31,23 @@ import {
 } from "@/components/ui/pagination";
 
 import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
+
+import { Skeleton } from "@/components/ui/skeleton";
 
 import { PlusCircle } from "lucide-react";
 
 import {
-	Dialog,
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-	DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
 } from "@/components/ui/dialog";
 
 import { Button } from "@/components/ui/button"
@@ -70,6 +72,7 @@ export function DataTable<TData extends { id: string }, TValue>({
     const [pageIndex, setPageIndex] = useState(0)
     const [pageSize, setPageSize] = useState(10)
     const [carAdded, setCarAdded] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleDelete = async (carId: string) => {
         const response = await fetch(`/api/cars/${carId}`, {
@@ -91,6 +94,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 
     const fetchData = useCallback(
         async ({ page, size }: { page: number; size: number }) => {
+            setIsLoading(true);
             const response = await fetch(
                 `/api/cars/?page=${page}&size=${size}`,
                 {
@@ -100,8 +104,9 @@ export function DataTable<TData extends { id: string }, TValue>({
                 }
             );
             const pageData = await response.json()
-            setData(pageData.content)
-            setPageCount(pageData.page.totalPages)
+                setData(pageData.content)
+                setPageCount(pageData.page.totalPages)
+                setIsLoading(false)
         },
         [id]
     );
@@ -173,46 +178,46 @@ export function DataTable<TData extends { id: string }, TValue>({
     return (
         <div>
             <div className="flex py-4 gap-4">
-				<Input
-					placeholder="Filter IDs..."
-					value={
-						(table
-							.getColumn("id")
-							?.getFilterValue() as string) ?? ""
-					}
-					onChange={(event) =>
-						table
-							.getColumn("id")
-							?.setFilterValue(event.target.value)
-					}
-					className="max-w-sm"
-				/>
-				<Select onValueChange={(value) => setPageSize(parseInt(value))}>
-					<SelectTrigger className="w-[180px]">
-						<SelectValue placeholder={pageSize} />
-					</SelectTrigger>
-					<SelectContent>
-						{[10, 25, 50, 100].map((size) => (
-							<SelectItem key={size} value={`${size}`}>
-								{size}
-							</SelectItem>
-						))}
-					</SelectContent>
-				</Select>
-				<Dialog>
-					<DialogTrigger asChild>
-						<Button className="ml-auto">
-							<PlusCircle /> Add Car
-						</Button>
-					</DialogTrigger>
-					<DialogContent className="sm:max-w-md">
-						<DialogHeader>
-							<DialogTitle>Add Car</DialogTitle>
-						</DialogHeader>
-						<AddCarForm setCarAdded={setCarAdded} />
-					</DialogContent>
-				</Dialog>
-			</div>
+                <Input
+                    placeholder="Filter IDs..."
+                    value={
+                        (table
+                            .getColumn("id")
+                            ?.getFilterValue() as string) ?? ""
+                    }
+                    onChange={(event) =>
+                        table
+                            .getColumn("id")
+                            ?.setFilterValue(event.target.value)
+                    }
+                    className="max-w-sm"
+                />
+                <Select onValueChange={(value) => setPageSize(parseInt(value))}>
+                    <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder={pageSize} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {[10, 25, 50, 100].map((size) => (
+                            <SelectItem key={size} value={`${size}`}>
+                                {size}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button className="ml-auto">
+                            <PlusCircle /> Add Car
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-md">
+                        <DialogHeader>
+                            <DialogTitle>Add Car</DialogTitle>
+                        </DialogHeader>
+                        <AddCarForm setCarAdded={setCarAdded} />
+                    </DialogContent>
+                </Dialog>
+            </div>
             <div className="rounded-md border">
                 <Table>
                     <TableHeader>
@@ -247,9 +252,33 @@ export function DataTable<TData extends { id: string }, TValue>({
                                     ))}
                                 </TableRow>
                             ))
+                        ) : isLoading ? (
+                            <TableRow>
+                                <TableCell>
+                                    <Skeleton className="h-4 w-72" />
+                                </TableCell>
+                                <TableCell>
+                                    <Skeleton className="h-4 w-32" />
+                                </TableCell>
+                                <TableCell>
+                                    <Skeleton className="h-4 w-4" />
+                                </TableCell>
+                                <TableCell>
+                                    <div className="flex gap-4">
+                                        <Skeleton className="h-10 w-12" />
+                                        <Skeleton className="h-10 w-12" />
+                                    </div>
+                                </TableCell>
+                            </TableRow>
                         ) : (
                             <TableRow>
-                                <TableCell colSpan={columns.length} className="h-24 text-center">
+                                <TableCell
+                                    colSpan={
+                                        columns(handleDelete, setCarAdded)
+                                            .length
+                                    }
+                                    className="h-24 text-center"
+                                >
                                     No results.
                                 </TableCell>
                             </TableRow>
@@ -258,48 +287,48 @@ export function DataTable<TData extends { id: string }, TValue>({
                 </Table>
             </div>
             <div className="py-4">
-				<Pagination>
-					<PaginationContent>
-						<PaginationItem>
-							<Button
-								variant="ghost"
-								size="sm"
-								onClick={() => {
-									table.previousPage();
-									setPageIndex((p) => p - 1);
-								}}
-								disabled={!table.getCanPreviousPage()}
-							>
-								Previous
-							</Button>
-						</PaginationItem>
-						{pageIndex > 2 && (
-							<PaginationItem>
-								<PaginationEllipsis />
-							</PaginationItem>
-						)}
-						{generatePagination()}
-						{pageIndex < pageCount - 1 && pageCount > 3 && (
-							<PaginationItem>
-								<PaginationEllipsis />
-							</PaginationItem>
-						)}
-						<PaginationItem>
-							<Button
-								variant="ghost"
-								size="sm"
-								onClick={() => {
-									table.nextPage();
-									setPageIndex((p) => p + 1);
-								}}
-								disabled={!table.getCanNextPage()}
-							>
-								Next
-							</Button>
-						</PaginationItem>
-					</PaginationContent>
-				</Pagination>
-			</div>
+                <Pagination>
+                    <PaginationContent>
+                        <PaginationItem>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                    table.previousPage();
+                                    setPageIndex((p) => p - 1);
+                                }}
+                                disabled={!table.getCanPreviousPage()}
+                            >
+                                Previous
+                            </Button>
+                        </PaginationItem>
+                        {pageIndex > 2 && (
+                            <PaginationItem>
+                                <PaginationEllipsis />
+                            </PaginationItem>
+                        )}
+                        {generatePagination()}
+                        {pageIndex < pageCount - 1 && pageCount > 3 && (
+                            <PaginationItem>
+                                <PaginationEllipsis />
+                            </PaginationItem>
+                        )}
+                        <PaginationItem>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                    table.nextPage();
+                                    setPageIndex((p) => p + 1);
+                                }}
+                                disabled={!table.getCanNextPage()}
+                            >
+                                Next
+                            </Button>
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
+            </div>
         </div>
     )
 }
