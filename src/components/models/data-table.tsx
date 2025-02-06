@@ -72,12 +72,15 @@ export function DataTable<TData extends { id: string }, TValue>({
 	const [isLoading, setIsLoading] = useState(true);
 
 	const handleDelete = async (modelId: string) => {
-		const response = await fetch(`/api/models/${modelId}`, {
-			method: "DELETE",
-			headers: {
-				Authorization: `Bearer ${id}`,
-			},
-		});
+		const response = await fetch(
+			`${import.meta.env.API_URL}/models/${modelId}`,
+			{
+				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${id}`,
+				},
+			}
+		);
 
 		if (response.ok) {
 			setModelAdded(true);
@@ -94,7 +97,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 	};
 
 	const fetchData = useCallback(async () => {
-		const response = await fetch("/api/models/", {
+		const response = await fetch(`${import.meta.env.API_URL}/models/`, {
 			headers: {
 				Authorization: `Bearer ${id}`,
 			},
@@ -223,7 +226,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 								create a new Brand.
 							</DialogDescription>
 						</DialogHeader>
-						<BrandUploader/>
+						<BrandUploader />
 					</DialogContent>
 				</Dialog>
 				<Dialog>

@@ -30,7 +30,7 @@ const BrandUploader = ({
 		setLoading(true);
 
 		try {
-			const response = await fetch("/api/brands/", {
+			const response = await fetch(`${import.meta.env.API_URL}/brands/`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

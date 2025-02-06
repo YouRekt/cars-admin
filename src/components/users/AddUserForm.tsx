@@ -38,7 +38,7 @@ const AddUserForm = ({
 	const { toast } = useToast();
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		const response = await fetch("/api/customers/", {
+		const response = await fetch(`${import.meta.env.API_URL}/customers/`, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
