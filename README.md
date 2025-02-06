@@ -10,6 +10,18 @@
 -   [x] ~~Add **Multisorting** functionality.~~
 -   [x] Add [Manual Pagination](https://tanstack.com/table/latest/docs/api/features/pagination#manualpagination)
 
+##### `/rentals`
+
+-   [x] Develop **Main Functionality**.
+
+##### `/administrators`
+
+-   [x] Develop **Main Functionality**.
+
+##### `/models`
+
+-   [x] Develop **Main Functionality**.
+
 #### ⚙️ **Miscellaneous**
 
 -   [x] Investigate **weird performance issues** (possibly caused by `ProtectedRoute`).
@@ -18,12 +30,5 @@
 
 ##### `/cars`
 
--   [ ] Develop **Main Functionality**.
-
-##### `/rentals`
-
--   [ ] Develop **Main Functionality**.
-
-##### `/administrators`
-
--   [ ] Develop **Main Functionality**.
+-   [x] Develop **Main Functionality**.
+-   [ ] Add better Input Form
