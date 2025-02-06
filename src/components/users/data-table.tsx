@@ -34,7 +34,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Loader, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import {
 	Dialog,
 	DialogContent,
@@ -45,6 +45,7 @@ import {
 } from "@/components/ui/dialog";
 import AddUserForm from "@/components/users/AddUserForm";
 import { useToast } from "@/hooks/use-toast";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface DataTableProps<TData extends { id: string }, TValue> {
 	columns: (
@@ -256,14 +257,20 @@ export function DataTable<TData extends { id: string }, TValue>({
 							))
 						) : isLoading ? (
 							<TableRow>
-								<TableCell
-									colSpan={
-										columns(handleDelete, setUserAdded)
-											.length
-									}
-									className="h-24 text-center"
-								>
-									<Loader />
+								<TableCell>
+									<Skeleton className="h-4 w-72" />
+								</TableCell>
+								<TableCell>
+									<Skeleton className="h-4 w-32" />
+								</TableCell>
+								<TableCell>
+									<Skeleton className="h-4 w-4" />
+								</TableCell>
+								<TableCell>
+									<div className="flex gap-4">
+										<Skeleton className="h-10 w-10" />
+										<Skeleton className="h-10 w-10" />
+									</div>
 								</TableCell>
 							</TableRow>
 						) : (
