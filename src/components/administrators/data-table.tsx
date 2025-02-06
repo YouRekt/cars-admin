@@ -266,9 +266,6 @@ export function DataTable<TData extends { id: string }, TValue>({
 									<Skeleton className="h-4 w-32" />
 								</TableCell>
 								<TableCell>
-									<Skeleton className="h-4 w-4" />
-								</TableCell>
-								<TableCell>
 									<div className="flex gap-4">
 										<Skeleton className="h-10 w-10" />
 										<Skeleton className="h-10 w-10" />
