@@ -1,6 +1,4 @@
-import SidebarButtonProvider from "@/components/SidebarButtonProvider";
-
 const Cars = () => {
-	return <SidebarButtonProvider>Cars</SidebarButtonProvider>;
+	return <div>Cars</div>;
 };
 export default Cars;

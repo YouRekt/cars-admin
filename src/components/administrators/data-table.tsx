@@ -43,14 +43,14 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog";
-import AddUserForm from "@/components/users/AddUserForm";
+import AddAdministratorForm from "@/components/administrators/AddAdministratorForm";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface DataTableProps<TData extends { id: string }, TValue> {
 	columns: (
 		handleDelete: (id: string) => void,
-		setUserAdded: (next: boolean) => void
+		setAdministratorAdded: (next: boolean) => void
 	) => ColumnDef<TData, TValue>[];
 }
 
@@ -65,11 +65,11 @@ export function DataTable<TData extends { id: string }, TValue>({
 	const [pageCount, setPageCount] = useState(0);
 	const [pageIndex, setPageIndex] = useState(0);
 	const [pageSize, setPageSize] = useState(10);
-	const [userAdded, setUserAdded] = useState(false);
+	const [administratorAdded, setAdministratorAdded] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 
-	const handleDelete = async (userId: string) => {
-		const response = await fetch(`/api/customers/${userId}`, {
+	const handleDelete = async (administratorId: string) => {
+		const response = await fetch(`/api/administrators/${administratorId}`, {
 			method: "DELETE",
 			headers: {
 				Authorization: `Bearer ${id}`,
@@ -77,12 +77,12 @@ export function DataTable<TData extends { id: string }, TValue>({
 		});
 
 		if (response.ok) {
-			setUserAdded(true);
+			setAdministratorAdded(true);
 		}
 
 		toast({
-			title: "User removed",
-			description: `User ${userId} removed.`,
+			title: "Administrator removed",
+			description: `Administrator ${administratorId} removed.`,
 		});
 	};
 
@@ -90,7 +90,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 		async ({ page, size }: { page: number; size: number }) => {
 			setIsLoading(true);
 			const response = await fetch(
-				`/api/customers/?page=${page}&size=${size}`,
+				`/api/administrators/?page=${page}&size=${size}`,
 				{
 					headers: {
 						Authorization: `Bearer ${id}`,
@@ -107,12 +107,12 @@ export function DataTable<TData extends { id: string }, TValue>({
 
 	useEffect(() => {
 		fetchData({ page: pageIndex, size: pageSize });
-		setUserAdded(false);
-	}, [fetchData, pageIndex, pageSize, userAdded]);
+		setAdministratorAdded(false);
+	}, [fetchData, pageIndex, pageSize, administratorAdded]);
 
 	const table = useReactTable({
 		data,
-		columns: columns(handleDelete, setUserAdded),
+		columns: columns(handleDelete, setAdministratorAdded),
 		getCoreRowModel: getCoreRowModel(),
 		onColumnFiltersChange: setColumnFilters,
 		getFilteredRowModel: getFilteredRowModel(),
@@ -172,15 +172,15 @@ export function DataTable<TData extends { id: string }, TValue>({
 		<div>
 			<div className="flex py-4 gap-4">
 				<Input
-					placeholder="Filter emails..."
+					placeholder="Filter usernames..."
 					value={
 						(table
-							.getColumn("email")
+							.getColumn("username")
 							?.getFilterValue() as string) ?? ""
 					}
 					onChange={(event) =>
 						table
-							.getColumn("email")
+							.getColumn("username")
 							?.setFilterValue(event.target.value)
 					}
 					className="max-w-sm"
@@ -200,18 +200,20 @@ export function DataTable<TData extends { id: string }, TValue>({
 				<Dialog>
 					<DialogTrigger asChild>
 						<Button className="ml-auto">
-							<PlusCircle /> Add User
+							<PlusCircle /> Add Administrator
 						</Button>
 					</DialogTrigger>
 					<DialogContent className="sm:max-w-md">
 						<DialogHeader>
-							<DialogTitle>Add User</DialogTitle>
+							<DialogTitle>Add Administrator</DialogTitle>
 							<DialogDescription>
-								Input the user's email and click "Add" to create
-								a new User.
+								Input the administrator's email and click "Add"
+								to create a new Administrator.
 							</DialogDescription>
 						</DialogHeader>
-						<AddUserForm setUserAdded={setUserAdded} />
+						<AddAdministratorForm
+							setAdministratorAdded={setAdministratorAdded}
+						/>
 					</DialogContent>
 				</Dialog>
 			</div>
@@ -277,8 +279,10 @@ export function DataTable<TData extends { id: string }, TValue>({
 							<TableRow>
 								<TableCell
 									colSpan={
-										columns(handleDelete, setUserAdded)
-											.length
+										columns(
+											handleDelete,
+											setAdministratorAdded
+										).length
 									}
 									className="h-24 text-center"
 								>

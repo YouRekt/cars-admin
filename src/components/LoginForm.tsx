@@ -24,6 +24,8 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 const formSchema = z.object({
 	username: z.string().min(2, {
@@ -36,6 +38,7 @@ const formSchema = z.object({
 
 const LoginForm = () => {
 	const navigate = useNavigate();
+	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
@@ -122,7 +125,10 @@ const LoginForm = () => {
 								<FormItem>
 									<FormLabel>Username</FormLabel>
 									<FormControl>
-										<Input placeholder="test" {...field} />
+										<Input
+											placeholder="Enter your username"
+											{...field}
+										/>
 									</FormControl>
 									<FormDescription>
 										This is your username for the admin
@@ -138,13 +144,40 @@ const LoginForm = () => {
 							render={({ field }) => (
 								<FormItem>
 									<FormLabel>Password</FormLabel>
-									<FormControl>
+									<div className="relative">
 										<Input
-											placeholder="test123"
-											type="password"
+											id="password"
+											type={
+												isPasswordVisible
+													? "text"
+													: "password"
+											}
+											placeholder="Enter your password"
 											{...field}
 										/>
-									</FormControl>
+										<Button
+											type="button"
+											variant="ghost"
+											size="icon"
+											className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8"
+											onClick={() =>
+												setIsPasswordVisible(
+													!isPasswordVisible
+												)
+											}
+											aria-label={
+												isPasswordVisible
+													? "Hide password"
+													: "Show password"
+											}
+										>
+											{isPasswordVisible ? (
+												<EyeOff className="h-4 w-4" />
+											) : (
+												<Eye className="h-4 w-4" />
+											)}
+										</Button>
+									</div>
 									<FormDescription>
 										This is your password for the admin
 										panel.
