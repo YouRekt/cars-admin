@@ -7,7 +7,7 @@
 ##### `/users`
 
 -   [x] Refactor the **User Table** according to requirements.
--   ~~[ ] Add **Multisorting** functionality.~~
+-   [x] ~~Add **Multisorting** functionality.~~
 -   [x] Add [Manual Pagination](https://tanstack.com/table/latest/docs/api/features/pagination#manualpagination)
 
 #### ⚙️ **Miscellaneous**
