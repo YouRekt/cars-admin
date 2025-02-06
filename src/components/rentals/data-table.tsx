@@ -138,7 +138,7 @@ export function DataTable<TData extends { id: string }, TValue>({
         <div>
             <div className="flex py-4 gap-4">
             <Input
-                    placeholder="Filter IDs..."
+                    placeholder="Filter By Rental IDs..."
                     value={
                         (table
                             .getColumn("id")

@@ -6,7 +6,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/
 import { Checkbox } from "../ui/checkbox"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog"
 import { Button } from "../ui/button"
-import { Accessibility, CircleX, Trash } from "lucide-react"
+import { Accessibility, CircleX } from "lucide-react"
 
 export type Customer = {
     id: string
@@ -27,7 +27,7 @@ export const columns = (
 ): ColumnDef<Rental>[] => [
         {
             accessorKey: "id",
-            header: "ID",
+            header: "Rental ID",
             cell: ({ row }) => {
                 const id: string = row.getValue("id");
 
