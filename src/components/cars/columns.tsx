@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
-import { Edit, Trash } from "lucide-react";
+import { Edit, Info, Trash } from "lucide-react";
 
 import {
     Tooltip,
@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/dialog"
 
 import EditCarForm from "./EditCarForm";
+import { AlertDialog, AlertDialogCancel, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "../ui/alert-dialog";
+import CarDetails from "./CarDetails";
 
 export type Model = {
     id: string
@@ -170,13 +172,45 @@ export const columns = (
                                 />
                             </DialogContent>
                         </Dialog>
-                        <Button
-                            size="icon"
-                            variant="destructive"
-                            onClick={() => handleDelete(id)}
-                        >
-                            <Trash />
-                        </Button>
+                        <AlertDialog>
+						<AlertDialogTrigger asChild>
+							<Button size="icon" variant="destructive">
+								<Trash />
+							</Button>
+						</AlertDialogTrigger>
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle>
+									Are you absolutely sure?
+								</AlertDialogTitle>
+								<AlertDialogDescription>
+									This action cannot be undone. This will
+									permanently delete the car.
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+							<AlertDialogFooter>
+								<AlertDialogAction
+									asChild
+									className="bg-destructive hover:bg-destructive"
+								>
+									<Button onClick={() => handleDelete(id)}>
+										Delete
+									</Button>
+								</AlertDialogAction>
+								<AlertDialogCancel>Cancel</AlertDialogCancel>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button size="icon" variant="outline">
+                                <Info />
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <CarDetails car={row.original}/>
+                        </DialogContent>
+                    </Dialog>
                     </div>
                 )
             }

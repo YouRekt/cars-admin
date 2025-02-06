@@ -1,62 +1,19 @@
 "use client"
 
-import {
-    ColumnDef,
-    flexRender,
-    getCoreRowModel,
-    useReactTable,
-    getFilteredRowModel,
-    ColumnFiltersState,
-} from "@tanstack/react-table"
-
-import { Input } from "@/components/ui/input";
-
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
-import useAuth from "@/hooks/use-auth"
-import { useCallback, useEffect, useState } from "react"
-import { useToast } from "@/hooks/use-toast"
-
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-} from "@/components/ui/pagination";
-
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-
-import { Skeleton } from "@/components/ui/skeleton";
-
-import { PlusCircle } from "lucide-react";
-
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
-
 import { Button } from "@/components/ui/button"
-import AddCarForm from "@/components/cars/AddCarForm";
+import { Input } from "@/components/ui/input"
+import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from "@/components/ui/pagination"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import useAuth from "@/hooks/use-auth"
+import { useToast } from "@/hooks/use-toast"
+import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, useReactTable } from "@tanstack/react-table"
+import { useCallback, useEffect, useState } from "react"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
+import { Skeleton } from "../ui/skeleton"
 
 interface DataTableProps<TData, TValue> {
     columns: (
         handleDelete: (id: string) => void,
-        setCarAdded: (next: boolean) => void
     ) => ColumnDef<TData, TValue>[]
 }
 
@@ -71,32 +28,26 @@ export function DataTable<TData extends { id: string }, TValue>({
     const [pageCount, setPageCount] = useState(0)
     const [pageIndex, setPageIndex] = useState(0)
     const [pageSize, setPageSize] = useState(10)
-    const [carAdded, setCarAdded] = useState(false)
-    const [isLoading, setIsLoading] = useState(false);
+    const [isCancelled, setIsCancelled] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
-    const handleDelete = async (carId: string) => {
-        const response = await fetch(`/api/cars/${carId}`, {
+    const handleDelete = async (rentalId: string) => {
+        const response = await fetch(`/api/rentals/${rentalId}`, {
             method: "DELETE",
             headers: {
                 Authorization: `Bearer ${id}`,
             },
         });
-        console.log(response)
         if (response.ok) {
-            setCarAdded(true);
+            setIsCancelled(true)
             toast({
-                title: "Car removed",
-                description: `Car ${carId} removed.`
-            })
-        } else if (response.status == 409) {
-            toast({
-                title: "Could not remove car",
-                description: `Car ${carId} was not removed due to it being currently rented.`
+                title: "Rental removed",
+                description: `Rental ${rentalId} removed.`
             })
         } else {
             toast({
                 title: "Unknown error",
-                description: `Error is not defined in code: status${response.status}`
+                description: `Error is not defined in code: status${response.status} for rental ${rentalId}`
             })
         }
     }
@@ -105,7 +56,7 @@ export function DataTable<TData extends { id: string }, TValue>({
         async ({ page, size }: { page: number; size: number }) => {
             setIsLoading(true);
             const response = await fetch(
-                `/api/cars/?page=${page}&size=${size}`,
+                `/api/rentals/?page=${page}&size=${size}`,
                 {
                     headers: {
                         Authorization: `Bearer ${id}`,
@@ -113,22 +64,21 @@ export function DataTable<TData extends { id: string }, TValue>({
                 }
             );
             const pageData = await response.json()
-                setData(pageData.content)
-                setPageCount(pageData.page.totalPages)
-                setIsLoading(false)
+            setData(pageData.content)
+            setPageCount(pageData.page.totalPages)
+            setIsLoading(false)
         },
         [id]
     );
 
     useEffect(() => {
         fetchData({ page: pageIndex, size: pageSize })
-        setCarAdded(false)
-    }, [fetchData, pageIndex, pageSize, carAdded])
-
+        setIsCancelled(false)
+    }, [fetchData, pageIndex, pageSize, isCancelled])
 
     const table = useReactTable({
         data,
-        columns: columns(handleDelete, setCarAdded),
+        columns: columns(handleDelete),
         getCoreRowModel: getCoreRowModel(),
         onColumnFiltersChange: setColumnFilters,
         getFilteredRowModel: getFilteredRowModel(),
@@ -188,7 +138,7 @@ export function DataTable<TData extends { id: string }, TValue>({
         <div>
             <div className="flex py-4 gap-4">
                 <Input
-                    placeholder="Filter IDs..."
+                    placeholder="Filter By Rental IDs..."
                     value={
                         (table
                             .getColumn("id")
@@ -213,19 +163,6 @@ export function DataTable<TData extends { id: string }, TValue>({
                         ))}
                     </SelectContent>
                 </Select>
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <Button className="ml-auto">
-                            <PlusCircle /> Add Car
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-md">
-                        <DialogHeader>
-                            <DialogTitle>Add Car</DialogTitle>
-                        </DialogHeader>
-                        <AddCarForm setCarAdded={setCarAdded} />
-                    </DialogContent>
-                </Dialog>
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -264,17 +201,31 @@ export function DataTable<TData extends { id: string }, TValue>({
                         ) : isLoading ? (
                             <TableRow>
                                 <TableCell>
-                                    <Skeleton className="h-4 w-72" />
+                                    <Skeleton className="h-4 w-64" />
                                 </TableCell>
                                 <TableCell>
-                                    <Skeleton className="h-4 w-32" />
+                                    <Skeleton className="h-4 w-64" />
                                 </TableCell>
                                 <TableCell>
-                                    <Skeleton className="h-4 w-4" />
+                                    <Skeleton className="h-4 w-64" />
+                                </TableCell>
+                                <TableCell>
+                                    <div className="flex gap-4">
+                                        <Skeleton className="h-10 w-16" />
+                                    </div>
+                                </TableCell>
+                                <TableCell>
+                                    <div className="flex gap-4">
+                                        <Skeleton className="h-10 w-16" />
+                                    </div>
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex gap-4">
                                         <Skeleton className="h-10 w-12" />
+                                    </div>
+                                </TableCell>
+                                <TableCell>
+                                    <div className="flex gap-4">
                                         <Skeleton className="h-10 w-12" />
                                         <Skeleton className="h-10 w-12" />
                                     </div>
@@ -284,7 +235,7 @@ export function DataTable<TData extends { id: string }, TValue>({
                             <TableRow>
                                 <TableCell
                                     colSpan={
-                                        columns(handleDelete, setCarAdded)
+                                        columns(handleDelete)
                                             .length
                                     }
                                     className="h-24 text-center"
@@ -341,4 +292,5 @@ export function DataTable<TData extends { id: string }, TValue>({
             </div>
         </div>
     )
+
 }
