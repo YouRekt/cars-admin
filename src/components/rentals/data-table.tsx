@@ -137,7 +137,7 @@ export function DataTable<TData extends { id: string }, TValue>({
     return (
         <div>
             <div className="flex py-4 gap-4">
-            <Input
+                <Input
                     placeholder="Filter By Rental IDs..."
                     value={
                         (table
@@ -201,13 +201,23 @@ export function DataTable<TData extends { id: string }, TValue>({
                         ) : isLoading ? (
                             <TableRow>
                                 <TableCell>
-                                    <Skeleton className="h-4 w-32" />
+                                    <Skeleton className="h-4 w-64" />
                                 </TableCell>
                                 <TableCell>
-                                    <Skeleton className="h-4 w-32" />
+                                    <Skeleton className="h-4 w-64" />
                                 </TableCell>
                                 <TableCell>
-                                    <Skeleton className="h-4 w-32" />
+                                    <Skeleton className="h-4 w-64" />
+                                </TableCell>
+                                <TableCell>
+                                    <div className="flex gap-4">
+                                        <Skeleton className="h-10 w-16" />
+                                    </div>
+                                </TableCell>
+                                <TableCell>
+                                    <div className="flex gap-4">
+                                        <Skeleton className="h-10 w-16" />
+                                    </div>
                                 </TableCell>
                                 <TableCell>
                                     <div className="flex gap-4">
@@ -215,12 +225,8 @@ export function DataTable<TData extends { id: string }, TValue>({
                                     </div>
                                 </TableCell>
                                 <TableCell>
-                                <div className="flex gap-4">
+                                    <div className="flex gap-4">
                                         <Skeleton className="h-10 w-12" />
-                                    </div>
-                                </TableCell>
-                                <TableCell>
-                                <div className="flex gap-4">
                                         <Skeleton className="h-10 w-12" />
                                     </div>
                                 </TableCell>
