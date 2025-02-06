@@ -93,13 +93,19 @@ const EditCarForm = ({
 
         if (response.ok) {
             form.reset();
+            toast({
+                title: "Car information edited",
+                description: `Car's ${modelId} modelId has been changed to ${values.modelId} successfully.`,
+            });
+    
+        } else {
+            toast({
+                title: "Could not edit car info",
+                description: `Car's ${modelId} modelId information has not been changed due to it being rented or other unknown error.`,
+            });
         }
 
-        toast({
-            title: "Car information edited",
-            description: `Car's ${modelId} modelId has been changed to ${values.modelId} successfully.`,
-        });
-
+        
         setCarAdded(true);
     }
 
