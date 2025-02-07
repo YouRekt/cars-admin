@@ -113,12 +113,12 @@ const EditModelForm = ({
 	}, [fetchBrands, fetchFuelTypes, fetchModel]);
 
 	useEffect(() => {
-		form.setValue("name", model?.name);
-		form.setValue("productionYear", model?.productionYear);
-		form.setValue("fuelCapacity", model?.fuelCapacity);
-		form.setValue("seatCount", model?.seatCount);
-		form.setValue("doorCount", model?.doorCount);
-		form.setValue("dailyRate", model?.dailyRate);
+		form.setValue("name", model?.name ?? "");
+		form.setValue("productionYear", model?.productionYear ?? 0);
+		form.setValue("fuelCapacity", model?.fuelCapacity ?? 0);
+		form.setValue("seatCount", model?.seatCount ?? 0);
+		form.setValue("doorCount", model?.doorCount ?? 0);
+		form.setValue("dailyRate", model?.dailyRate ?? 0);
 	}, [model, form]);
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {

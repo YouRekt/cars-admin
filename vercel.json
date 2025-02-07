@@ -1,0 +1,8 @@
+{
+	"rewrites": [
+		{
+			"source": "/api/:match*",
+			"destination": "https://carscorp-dhavgthqcfbbckc2.polandcentral-01.azurewebsites.net/:match*"
+		}
+	]
+}
