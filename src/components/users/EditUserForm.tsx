@@ -40,7 +40,7 @@ const EditUserForm = ({
 	const { toast } = useToast();
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		const response = await fetch(`/api/customers/${userId}`, {
+		const response = await fetch(`/backend/customers/${userId}`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",

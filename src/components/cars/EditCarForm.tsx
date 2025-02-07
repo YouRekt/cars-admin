@@ -59,12 +59,12 @@ const EditCarForm = ({
 	const [images, setImages] = useState<{ id: string; url: string }[]>([]);
 	const [loadingImages, setLoadingImages] = useState(false);
 
-	// Fetch images from the API
+	// Fetch images from the backend
 	useEffect(() => {
 		const fetchImages = async () => {
 			setLoadingImages(true);
 			try {
-				const response = await fetch("/api/images/", {
+				const response = await fetch("/backend/images/", {
 					headers: {
 						Authorization: `Bearer ${id}`,
 					},
@@ -90,7 +90,7 @@ const EditCarForm = ({
 	}, [id, toast]);
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		const response = await fetch(`/api/cars/${carId}`, {
+		const response = await fetch(`/backend/cars/${carId}`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",

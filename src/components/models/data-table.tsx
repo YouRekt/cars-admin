@@ -72,7 +72,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 	const [isLoading, setIsLoading] = useState(true);
 
 	const handleDelete = async (modelId: string) => {
-		const response = await fetch(`/api/models/${modelId}`, {
+		const response = await fetch(`/backend/models/${modelId}`, {
 			method: "DELETE",
 			headers: {
 				Authorization: `Bearer ${id}`,
@@ -94,7 +94,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 	};
 
 	const fetchData = useCallback(async () => {
-		const response = await fetch("/api/models/", {
+		const response = await fetch("/backend/models/", {
 			headers: {
 				Authorization: `Bearer ${id}`,
 			},
@@ -197,7 +197,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 								return (
 									<DropdownMenuCheckboxItem
 										key={column.id}
-										className="capitalize"
+										className="cbackendtalize"
 										checked={column.getIsVisible()}
 										onCheckedChange={(value) =>
 											column.toggleVisibility(!!value)
@@ -223,7 +223,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 								create a new Brand.
 							</DialogDescription>
 						</DialogHeader>
-						<BrandUploader/>
+						<BrandUploader />
 					</DialogContent>
 				</Dialog>
 				<Dialog>

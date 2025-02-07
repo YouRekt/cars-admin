@@ -69,12 +69,15 @@ export function DataTable<TData extends { id: string }, TValue>({
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleDelete = async (administratorId: string) => {
-		const response = await fetch(`/api/administrators/${administratorId}`, {
-			method: "DELETE",
-			headers: {
-				Authorization: `Bearer ${id}`,
-			},
-		});
+		const response = await fetch(
+			`/backend/administrators/${administratorId}`,
+			{
+				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${id}`,
+				},
+			}
+		);
 
 		if (response.ok) {
 			setAdministratorAdded(true);
@@ -90,7 +93,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 		async ({ page, size }: { page: number; size: number }) => {
 			setIsLoading(true);
 			const response = await fetch(
-				`/api/administrators/?page=${page}&size=${size}`,
+				`/backend/administrators/?page=${page}&size=${size}`,
 				{
 					headers: {
 						Authorization: `Bearer ${id}`,

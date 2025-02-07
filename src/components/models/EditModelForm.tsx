@@ -54,7 +54,7 @@ const EditModelForm = ({
 	const [model, setModel] = useState<Model>();
 
 	const fetchModel = useCallback(async () => {
-		const response = await fetch(`/api/models/${modelId}`, {
+		const response = await fetch(`/backend/models/${modelId}`, {
 			headers: {
 				Authorization: `Bearer ${id}`,
 			},
@@ -67,7 +67,7 @@ const EditModelForm = ({
 	}, [id, modelId]);
 
 	const fetchBrands = useCallback(async () => {
-		const response = await fetch("/api/brands/", {
+		const response = await fetch("/backend/brands/", {
 			headers: {
 				Authorization: `Bearer ${id}`,
 			},
@@ -80,7 +80,7 @@ const EditModelForm = ({
 	}, [id]);
 
 	const fetchFuelTypes = useCallback(async () => {
-		const response = await fetch("/api/fuel-types/", {
+		const response = await fetch("/backend/fuel-types/", {
 			headers: {
 				Authorization: `Bearer ${id}`,
 			},
@@ -122,7 +122,7 @@ const EditModelForm = ({
 	}, [model, form]);
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		const response = await fetch(`/api/models/${modelId}`, {
+		const response = await fetch(`/backend/models/${modelId}`, {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",

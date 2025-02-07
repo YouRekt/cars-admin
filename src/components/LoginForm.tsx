@@ -50,7 +50,7 @@ const LoginForm = () => {
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		try {
-			const response = await fetch("/api/administrators/", {
+			const response = await fetch("/backend/administrators/", {
 				method: "PUT",
 				headers: {
 					"Content-Type": "application/json",
@@ -63,7 +63,7 @@ const LoginForm = () => {
 				if (token) {
 					try {
 						const response = await fetch(
-							`/api/administrators/${token}`,
+							`/backend/administrators/${token}`,
 							{
 								headers: {
 									Authorization: `Bearer ${token}`,

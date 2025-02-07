@@ -47,7 +47,7 @@ const AddAdministratorForm = ({
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		const response = await fetch("/api/administrators/", {
+		const response = await fetch("/backend/administrators/", {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
