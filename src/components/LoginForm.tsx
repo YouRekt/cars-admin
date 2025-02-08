@@ -57,6 +57,7 @@ const LoginForm = () => {
 					headers: {
 						"Content-Type": "application/json",
 					},
+					credentials: "include",
 					body: JSON.stringify(values),
 				}
 			);
@@ -73,6 +74,7 @@ const LoginForm = () => {
 								headers: {
 									Authorization: `Bearer ${token}`,
 								},
+								credentials: "include",
 							}
 						);
 						if (response.ok) {
