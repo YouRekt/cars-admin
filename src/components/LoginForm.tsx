@@ -56,7 +56,7 @@ const LoginForm = () => {
 					method: "PUT",
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: "",
+						Authorization: "a",
 						"Access-Control-Allow-Origin": "*",
 						"Access-Control-Allow-Credentials": "true",
 					},
