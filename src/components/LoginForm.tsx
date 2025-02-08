@@ -65,7 +65,7 @@ const LoginForm = () => {
 			if (response.ok) {
 				const token = await response.text();
 				Cookies.set("administrator-token", token, {
-					expires: 86400,
+					expires: 1,
 				});
 				if (token) {
 					try {
