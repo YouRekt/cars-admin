@@ -58,7 +58,7 @@ const AddCarForm = ({
 			setLoadingImages(true);
 			try {
 				const response = await fetch(
-					`https://${import.meta.env.VITE_VERCEL_URL}/images/`,
+					`https://${import.meta.env.VITE_API_URL}/images/`,
 					{
 						headers: {
 							Authorization: `Bearer ${id}`,
@@ -88,7 +88,7 @@ const AddCarForm = ({
 	// Handle form submission
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const response = await fetch(
-			`https://${import.meta.env.VITE_VERCEL_URL}/cars/`,
+			`https://${import.meta.env.VITE_API_URL}/cars/`,
 			{
 				method: "POST",
 				headers: {

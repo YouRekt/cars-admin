@@ -55,7 +55,7 @@ const EditModelForm = ({
 
 	const fetchModel = useCallback(async () => {
 		const response = await fetch(
-			`https://${import.meta.env.VITE_VERCEL_URL}/models/${modelId}`,
+			`https://${import.meta.env.VITE_API_URL}/models/${modelId}`,
 			{
 				headers: {
 					Authorization: `Bearer ${id}`,
@@ -72,7 +72,7 @@ const EditModelForm = ({
 
 	const fetchBrands = useCallback(async () => {
 		const response = await fetch(
-			`https://${import.meta.env.VITE_VERCEL_URL}/brands/`,
+			`https://${import.meta.env.VITE_API_URL}/brands/`,
 			{
 				headers: {
 					Authorization: `Bearer ${id}`,
@@ -89,7 +89,7 @@ const EditModelForm = ({
 
 	const fetchFuelTypes = useCallback(async () => {
 		const response = await fetch(
-			`https://${import.meta.env.VITE_VERCEL_URL}/fuel-types/`,
+			`https://${import.meta.env.VITE_API_URL}/fuel-types/`,
 			{
 				headers: {
 					Authorization: `Bearer ${id}`,
@@ -135,7 +135,7 @@ const EditModelForm = ({
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const response = await fetch(
-			`https://${import.meta.env.VITE_VERCEL_URL}/models/${modelId}`,
+			`https://${import.meta.env.VITE_API_URL}/models/${modelId}`,
 			{
 				method: "PUT",
 				headers: {

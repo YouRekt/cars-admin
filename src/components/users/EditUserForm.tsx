@@ -41,7 +41,7 @@ const EditUserForm = ({
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const response = await fetch(
-			`https://${import.meta.env.VITE_VERCEL_URL}/customers/${userId}`,
+			`https://${import.meta.env.VITE_API_URL}/customers/${userId}`,
 			{
 				method: "PUT",
 				headers: {

@@ -45,7 +45,7 @@ export function ImageUploader() {
 		formData.append("file", values.file);
 
 		const response = await fetch(
-			`https://${import.meta.env.VITE_VERCEL_URL}/images`,
+			`https://${import.meta.env.VITE_API_URL}/images`,
 			{
 				method: "POST",
 				headers: {

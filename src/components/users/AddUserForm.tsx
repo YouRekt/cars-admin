@@ -39,7 +39,7 @@ const AddUserForm = ({
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const response = await fetch(
-			`https://${import.meta.env.VITE_VERCEL_URL}/customers/`,
+			`https://${import.meta.env.VITE_API_URL}/customers/`,
 			{
 				method: "POST",
 				headers: {

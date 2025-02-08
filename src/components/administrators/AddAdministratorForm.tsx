@@ -48,7 +48,7 @@ const AddAdministratorForm = ({
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const response = await fetch(
-			`https://${import.meta.env.VITE_VERCEL_URL}/administrators/`,
+			`https://${import.meta.env.VITE_API_URL}/administrators/`,
 			{
 				method: "POST",
 				headers: {

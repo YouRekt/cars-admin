@@ -77,7 +77,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 
 	const handleDelete = async (carId: string) => {
 		const response = await fetch(
-			`https://${import.meta.env.VITE_VERCEL_URL}/cars/${carId}`,
+			`https://${import.meta.env.VITE_API_URL}/cars/${carId}`,
 			{
 				method: "DELETE",
 				headers: {
@@ -111,7 +111,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 			setIsLoading(true);
 			const response = await fetch(
 				`https://${
-					import.meta.env.VITE_VERCEL_URL
+					import.meta.env.VITE_API_URL
 				}/cars/?page=${page}&size=${size}`,
 				{
 					headers: {
