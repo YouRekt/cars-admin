@@ -1,4 +1,5 @@
 import Cookies from "js-cookie";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 const useAuth: () => [string, () => void, string] = () => {
@@ -10,8 +11,12 @@ const useAuth: () => [string, () => void, string] = () => {
 		localStorage.removeItem("username");
 	};
 	const username = localStorage.getItem("username");
+	useEffect(() => {
+		if (!username || !token) {
+			navigate("/", { replace: true });
+		}
+	}, [navigate, token, username]);
 	if (!username || !token) {
-		navigate("/", { replace: true });
 		return ["", () => {}, ""];
 	}
 
