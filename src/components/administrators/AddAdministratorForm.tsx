@@ -47,14 +47,17 @@ const AddAdministratorForm = ({
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		const response = await fetch("/backend/administrators/", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${id}`,
-			},
-			body: JSON.stringify(values),
-		});
+		const response = await fetch(
+			`https://${process.env.VERCEL_URL}/administrators/`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${id}`,
+				},
+				body: JSON.stringify(values),
+			}
+		);
 
 		if (response.ok) {
 			form.reset();

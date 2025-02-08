@@ -50,20 +50,23 @@ const LoginForm = () => {
 
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		try {
-			const response = await fetch("/backend/administrators/", {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(values),
-			});
+			const response = await fetch(
+				`https://${process.env.VERCEL_URL}/administrators/`,
+				{
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(values),
+				}
+			);
 
 			if (response.ok) {
 				const token = Cookies.get("administrator-token");
 				if (token) {
 					try {
 						const response = await fetch(
-							`/backend/administrators/${token}`,
+							`https://${process.env.VERCEL_URL}/administrators/${token}`,
 							{
 								headers: {
 									Authorization: `Bearer ${token}`,

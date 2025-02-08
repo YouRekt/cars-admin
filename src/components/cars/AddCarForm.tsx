@@ -57,11 +57,14 @@ const AddCarForm = ({
 		const fetchImages = async () => {
 			setLoadingImages(true);
 			try {
-				const response = await fetch("/backend/images/", {
-					headers: {
-						Authorization: `Bearer ${id}`,
-					},
-				});
+				const response = await fetch(
+					`https://${process.env.VERCEL_URL}/images/`,
+					{
+						headers: {
+							Authorization: `Bearer ${id}`,
+						},
+					}
+				);
 
 				if (!response.ok) throw new Error("Failed to fetch images.");
 
@@ -84,14 +87,17 @@ const AddCarForm = ({
 
 	// Handle form submission
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		const response = await fetch("/backend/cars/", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${id}`,
-			},
-			body: JSON.stringify(values),
-		});
+		const response = await fetch(
+			`https://${process.env.VERCEL_URL}/cars/`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${id}`,
+				},
+				body: JSON.stringify(values),
+			}
+		);
 
 		if (response.ok) {
 			form.reset();

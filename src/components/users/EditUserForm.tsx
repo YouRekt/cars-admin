@@ -40,14 +40,17 @@ const EditUserForm = ({
 	const { toast } = useToast();
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		const response = await fetch(`/backend/customers/${userId}`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${id}`,
-			},
-			body: JSON.stringify(values),
-		});
+		const response = await fetch(
+			`https://${process.env.VERCEL_URL}/customers/${userId}`,
+			{
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${id}`,
+				},
+				body: JSON.stringify(values),
+			}
+		);
 
 		if (response.ok) {
 			form.reset();

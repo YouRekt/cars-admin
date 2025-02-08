@@ -30,14 +30,17 @@ const BrandUploader = ({
 		setLoading(true);
 
 		try {
-			const response = await fetch("/backend/brands/", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${id}`,
-				},
-				body: JSON.stringify({ name, shortName }),
-			});
+			const response = await fetch(
+				`https://${process.env.VERCEL_URL}/brands/`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${id}`,
+					},
+					body: JSON.stringify({ name, shortName }),
+				}
+			);
 
 			if (!response.ok) throw new Error("Failed to add brand.");
 

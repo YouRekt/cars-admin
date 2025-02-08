@@ -72,12 +72,15 @@ export function DataTable<TData extends { id: string }, TValue>({
 	const [isLoading, setIsLoading] = useState(true);
 
 	const handleDelete = async (modelId: string) => {
-		const response = await fetch(`/backend/models/${modelId}`, {
-			method: "DELETE",
-			headers: {
-				Authorization: `Bearer ${id}`,
-			},
-		});
+		const response = await fetch(
+			`https://${process.env.VERCEL_URL}/models/${modelId}`,
+			{
+				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${id}`,
+				},
+			}
+		);
 
 		if (response.ok) {
 			setModelAdded(true);
@@ -94,11 +97,14 @@ export function DataTable<TData extends { id: string }, TValue>({
 	};
 
 	const fetchData = useCallback(async () => {
-		const response = await fetch("/backend/models/", {
-			headers: {
-				Authorization: `Bearer ${id}`,
-			},
-		});
+		const response = await fetch(
+			`https://${process.env.VERCEL_URL}/models/`,
+			{
+				headers: {
+					Authorization: `Bearer ${id}`,
+				},
+			}
+		);
 		const data = await response.json();
 		setData(data);
 		setIsLoading(false);

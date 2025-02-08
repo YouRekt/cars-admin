@@ -76,12 +76,15 @@ export function DataTable<TData extends { id: string }, TValue>({
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleDelete = async (carId: string) => {
-		const response = await fetch(`/backend/cars/${carId}`, {
-			method: "DELETE",
-			headers: {
-				Authorization: `Bearer ${id}`,
-			},
-		});
+		const response = await fetch(
+			`https://${process.env.VERCEL_URL}/cars/${carId}`,
+			{
+				method: "DELETE",
+				headers: {
+					Authorization: `Bearer ${id}`,
+				},
+			}
+		);
 		console.log(response);
 		if (response.ok) {
 			setCarAdded(true);
@@ -106,7 +109,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 		async ({ page, size }: { page: number; size: number }) => {
 			setIsLoading(true);
 			const response = await fetch(
-				`/backend/cars/?page=${page}&size=${size}`,
+				`https://${process.env.VERCEL_URL}/cars/?page=${page}&size=${size}`,
 				{
 					headers: {
 						Authorization: `Bearer ${id}`,

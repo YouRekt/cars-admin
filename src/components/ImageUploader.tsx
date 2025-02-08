@@ -44,14 +44,17 @@ export function ImageUploader() {
 		const formData = new FormData();
 		formData.append("file", values.file);
 
-		const response = await fetch("/backend/images", {
-			method: "POST",
-			headers: {
-				Authorization: `Bearer ${id}`, // Ensure the token is valid
-				// Do NOT set 'Content-Type', fetch will handle it for FormData
-			},
-			body: formData,
-		});
+		const response = await fetch(
+			`https://${process.env.VERCEL_URL}/images`,
+			{
+				method: "POST",
+				headers: {
+					Authorization: `Bearer ${id}`, // Ensure the token is valid
+					// Do NOT set 'Content-Type', fetch will handle it for FormData
+				},
+				body: formData,
+			}
+		);
 
 		if (response.ok) {
 			form.reset();

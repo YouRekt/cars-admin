@@ -72,11 +72,14 @@ const AddModelForm = ({
 	const [fuelTypes, setFuelTypes] = useState<FuelType[]>([]);
 
 	const fetchBrands = useCallback(async () => {
-		const response = await fetch("/backend/brands/", {
-			headers: {
-				Authorization: `Bearer ${id}`,
-			},
-		});
+		const response = await fetch(
+			`https://${process.env.VERCEL_URL}/brands/`,
+			{
+				headers: {
+					Authorization: `Bearer ${id}`,
+				},
+			}
+		);
 
 		if (response.ok) {
 			const data = await response.json();
@@ -85,11 +88,14 @@ const AddModelForm = ({
 	}, [id]);
 
 	const fetchFuelTypes = useCallback(async () => {
-		const response = await fetch("/backend/fuel-types/", {
-			headers: {
-				Authorization: `Bearer ${id}`,
-			},
-		});
+		const response = await fetch(
+			`https://${process.env.VERCEL_URL}/fuel-types/`,
+			{
+				headers: {
+					Authorization: `Bearer ${id}`,
+				},
+			}
+		);
 
 		if (response.ok) {
 			const data = await response.json();
@@ -103,14 +109,17 @@ const AddModelForm = ({
 	}, [fetchBrands, fetchFuelTypes]);
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
-		const response = await fetch("/backend/models/", {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${id}`,
-			},
-			body: JSON.stringify(values),
-		});
+		const response = await fetch(
+			`https://${process.env.VERCEL_URL}/models/`,
+			{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${id}`,
+				},
+				body: JSON.stringify(values),
+			}
+		);
 
 		if (response.ok) {
 			form.reset();
