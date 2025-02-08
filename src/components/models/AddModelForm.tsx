@@ -73,7 +73,7 @@ const AddModelForm = ({
 
 	const fetchBrands = useCallback(async () => {
 		const response = await fetch(
-			`https://${process.env.VERCEL_URL}/brands/`,
+			`https://${import.meta.env.VITE_VERCEL_URL}/brands/`,
 			{
 				headers: {
 					Authorization: `Bearer ${id}`,
@@ -89,7 +89,7 @@ const AddModelForm = ({
 
 	const fetchFuelTypes = useCallback(async () => {
 		const response = await fetch(
-			`https://${process.env.VERCEL_URL}/fuel-types/`,
+			`https://${import.meta.env.VITE_VERCEL_URL}/fuel-types/`,
 			{
 				headers: {
 					Authorization: `Bearer ${id}`,
@@ -110,7 +110,7 @@ const AddModelForm = ({
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const response = await fetch(
-			`https://${process.env.VERCEL_URL}/models/`,
+			`https://${import.meta.env.VITE_VERCEL_URL}/models/`,
 			{
 				method: "POST",
 				headers: {

@@ -73,7 +73,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 
 	const handleDelete = async (modelId: string) => {
 		const response = await fetch(
-			`https://${process.env.VERCEL_URL}/models/${modelId}`,
+			`https://${import.meta.env.VITE_VERCEL_URL}/models/${modelId}`,
 			{
 				method: "DELETE",
 				headers: {
@@ -98,7 +98,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 
 	const fetchData = useCallback(async () => {
 		const response = await fetch(
-			`https://${process.env.VERCEL_URL}/models/`,
+			`https://${import.meta.env.VITE_VERCEL_URL}/models/`,
 			{
 				headers: {
 					Authorization: `Bearer ${id}`,

@@ -70,7 +70,9 @@ export function DataTable<TData extends { id: string }, TValue>({
 
 	const handleDelete = async (administratorId: string) => {
 		const response = await fetch(
-			`https://${process.env.VERCEL_URL}/administrators/${administratorId}`,
+			`https://${
+				import.meta.env.VITE_VERCEL_URL
+			}/administrators/${administratorId}`,
 			{
 				method: "DELETE",
 				headers: {
@@ -93,7 +95,9 @@ export function DataTable<TData extends { id: string }, TValue>({
 		async ({ page, size }: { page: number; size: number }) => {
 			setIsLoading(true);
 			const response = await fetch(
-				`https://${process.env.VERCEL_URL}/administrators/?page=${page}&size=${size}`,
+				`https://${
+					import.meta.env.VITE_VERCEL_URL
+				}/administrators/?page=${page}&size=${size}`,
 				{
 					headers: {
 						Authorization: `Bearer ${id}`,

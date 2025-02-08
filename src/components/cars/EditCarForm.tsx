@@ -65,7 +65,7 @@ const EditCarForm = ({
 			setLoadingImages(true);
 			try {
 				const response = await fetch(
-					`https://${process.env.VERCEL_URL}/images/`,
+					`https://${import.meta.env.VITE_VERCEL_URL}/images/`,
 					{
 						headers: {
 							Authorization: `Bearer ${id}`,
@@ -94,7 +94,7 @@ const EditCarForm = ({
 
 	async function onSubmit(values: z.infer<typeof formSchema>) {
 		const response = await fetch(
-			`https://${process.env.VERCEL_URL}/cars/${carId}`,
+			`https://${import.meta.env.VITE_VERCEL_URL}/cars/${carId}`,
 			{
 				method: "PUT",
 				headers: {

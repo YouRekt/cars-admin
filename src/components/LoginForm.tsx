@@ -51,7 +51,7 @@ const LoginForm = () => {
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		try {
 			const response = await fetch(
-				`https://${process.env.VERCEL_URL}/administrators/`,
+				`https://${import.meta.env.VITE_VERCEL_URL}/administrators/`,
 				{
 					method: "PUT",
 					headers: {
@@ -66,7 +66,9 @@ const LoginForm = () => {
 				if (token) {
 					try {
 						const response = await fetch(
-							`https://${process.env.VERCEL_URL}/administrators/${token}`,
+							`https://${
+								import.meta.env.VITE_VERCEL_URL
+							}/administrators/${token}`,
 							{
 								headers: {
 									Authorization: `Bearer ${token}`,

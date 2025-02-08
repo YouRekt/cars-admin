@@ -31,7 +31,7 @@ const BrandUploader = ({
 
 		try {
 			const response = await fetch(
-				`https://${process.env.VERCEL_URL}/brands/`,
+				`https://${import.meta.env.VITE_VERCEL_URL}/brands/`,
 				{
 					method: "POST",
 					headers: {
