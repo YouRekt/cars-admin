@@ -51,7 +51,7 @@ const LoginForm = () => {
 	const onSubmit = async (values: z.infer<typeof formSchema>) => {
 		try {
 			const response = await fetch(
-				`https://${import.meta.env.VITE_VERCEL_URL}/administrators/`,
+				`https://${import.meta.env.VITE_API_URL}/administrators/`,
 				{
 					method: "PUT",
 					headers: {
@@ -71,7 +71,7 @@ const LoginForm = () => {
 					try {
 						const response = await fetch(
 							`https://${
-								import.meta.env.VITE_VERCEL_URL
+								import.meta.env.VITE_API_URL
 							}/administrators/${token}`,
 							{
 								headers: {
