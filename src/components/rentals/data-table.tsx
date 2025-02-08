@@ -62,6 +62,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 				headers: {
 					Authorization: `Bearer ${id}`,
 				},
+				credentials: "include",
 			}
 		);
 		if (response.ok) {
@@ -89,6 +90,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 					headers: {
 						Authorization: `Bearer ${id}`,
 					},
+					credentials: "include",
 				}
 			);
 			const pageData = await response.json();

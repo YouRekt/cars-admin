@@ -60,6 +60,7 @@ const EditModelForm = ({
 				headers: {
 					Authorization: `Bearer ${id}`,
 				},
+				credentials: "include",
 			}
 		);
 
@@ -76,6 +77,7 @@ const EditModelForm = ({
 				headers: {
 					Authorization: `Bearer ${id}`,
 				},
+				credentials: "include",
 			}
 		);
 
@@ -92,6 +94,7 @@ const EditModelForm = ({
 				headers: {
 					Authorization: `Bearer ${id}`,
 				},
+				credentials: "include",
 			}
 		);
 

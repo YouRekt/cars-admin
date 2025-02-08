@@ -76,6 +76,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 				headers: {
 					Authorization: `Bearer ${id}`,
 				},
+				credentials: "include",
 			}
 		);
 
@@ -100,6 +101,7 @@ export function DataTable<TData extends { id: string }, TValue>({
 					headers: {
 						Authorization: `Bearer ${id}`,
 					},
+					credentials: "include",
 				}
 			);
 			const pageData = await response.json();

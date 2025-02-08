@@ -78,6 +78,7 @@ const AddModelForm = ({
 				headers: {
 					Authorization: `Bearer ${id}`,
 				},
+				credentials: "include",
 			}
 		);
 
@@ -94,6 +95,7 @@ const AddModelForm = ({
 				headers: {
 					Authorization: `Bearer ${id}`,
 				},
+				credentials: "include",
 			}
 		);
 
