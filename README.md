@@ -22,13 +22,13 @@
 
 -   [x] Develop **Main Functionality**.
 
+##### `/cars`
+
+-   [x] Develop **Main Functionality**.
+-   [x] Add better Input Form
+
 #### ⚙️ **Miscellaneous**
 
 -   [x] Investigate **weird performance issues** (possibly caused by `ProtectedRoute`).
 
 #### 🟡 **In Progress**
-
-##### `/cars`
-
--   [x] Develop **Main Functionality**.
--   [ ] Add better Input Form
