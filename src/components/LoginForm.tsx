@@ -63,9 +63,8 @@ const LoginForm = () => {
 			);
 
 			if (response.ok) {
-				const data = await response.text();
-				alert(data);
-				const token = Cookies.set("administrator-token", data);
+				const token = await response.text();
+				Cookies.set("administrator-token", token);
 				if (token) {
 					try {
 						const response = await fetch(
