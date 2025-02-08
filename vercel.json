@@ -12,11 +12,6 @@
 			]
 		}
 	],
-	"rewrites": [
-		{
-			"source": "/backend/:match*",
-			"destination": "https://carscorp-dhavgthqcfbbckc2.polandcentral-01.azurewebsites.net/:match*"
-		},
-		{ "source": "/(.*)", "destination": "/" }
-	]
+
+	"rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
