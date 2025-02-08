@@ -64,7 +64,9 @@ const LoginForm = () => {
 
 			if (response.ok) {
 				const token = await response.text();
-				Cookies.set("administrator-token", token);
+				Cookies.set("administrator-token", token, {
+					expires: 86400,
+				});
 				if (token) {
 					try {
 						const response = await fetch(
