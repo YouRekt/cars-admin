@@ -56,6 +56,7 @@ const LoginForm = () => {
 					method: "PUT",
 					headers: {
 						"Content-Type": "application/json",
+						"Access-Control-Allow-Origin": "*",
 					},
 					credentials: "include",
 					body: JSON.stringify(values),
@@ -73,6 +74,7 @@ const LoginForm = () => {
 							{
 								headers: {
 									Authorization: `Bearer ${token}`,
+									"Access-Control-Allow-Origin": "*",
 								},
 								credentials: "include",
 							}
