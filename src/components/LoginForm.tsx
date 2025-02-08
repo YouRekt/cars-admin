@@ -64,6 +64,7 @@ const LoginForm = () => {
 
 			if (response.ok) {
 				const data = await response.text();
+				alert(data);
 				const token = Cookies.set("administrator-token", data);
 				if (token) {
 					try {
